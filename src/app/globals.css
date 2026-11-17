@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ulis-navy: #003B73;
+  --color-ulis-blue: #0B4F9F;
+  --color-ulis-accent: #1E88E5;
+  --color-ulis-light: #EFF6FF;
+  --color-ulis-ice: #F8FAFC;
+  --font-sans: var(--font-be-vietnam-pro), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+}
+
+body {
+  background-color: #F8FAFC;
+  color: var(--foreground);
+}
+
+/* Glassmorphism utility */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Subtle pulse for radar scanner */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-radar-sweep {
+  animation: radar-sweep 6s linear infinite;
+}
+
+/* Pulse animation for urgent badges */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.98);
+  }
+}
+
+.animate-urgent-pulse {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
