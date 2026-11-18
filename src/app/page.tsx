@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { HeroSearch } from '@/components/HeroSearch';
 import { FilterBar } from '@/components/FilterBar';
@@ -29,6 +29,40 @@ export default function Home() {
     'ulis-debate-2026': true,
     'ulis-ielts-cv-workshop': true,
   });
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Hydrate from localStorage on client mount (Zero friction guest persistence)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        const storedIds = localStorage.getItem('ulis_radar_saved_event_ids');
+        const storedSettings = localStorage.getItem('ulis_radar_saved_settings');
+        if (storedIds) {
+          setSavedEventIds(JSON.parse(storedIds));
+        }
+        if (storedSettings) {
+          setSavedSettings(JSON.parse(storedSettings));
+        }
+      } catch {
+        // Ignore JSON parse or storage access errors in private browsing
+      } finally {
+        setIsHydrated(true);
+      }
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Sync to localStorage whenever saved events or settings change
+  useEffect(() => {
+    if (!isHydrated) return;
+    try {
+      localStorage.setItem('ulis_radar_saved_event_ids', JSON.stringify(savedEventIds));
+      localStorage.setItem('ulis_radar_saved_settings', JSON.stringify(savedSettings));
+    } catch {
+      // Ignore quota exceeded or storage disabled
+    }
+  }, [savedEventIds, savedSettings, isHydrated]);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -241,7 +275,6 @@ export default function Home() {
       <Navbar
         savedCount={savedEventIds.length}
         onOpenSavedDrawer={() => setIsSavedDrawerOpen(true)}
-        onOpenSubmitModal={() => setIsSubmitModalOpen(true)}
       />
 
       <main className="flex-1">
@@ -345,7 +378,7 @@ export default function Home() {
       </main>
 
       {/* Academic Footer */}
-      <Footer />
+      <Footer onOpenSubmitModal={() => setIsSubmitModalOpen(true)} />
 
       {/* MODALS & DRAWERS */}
 

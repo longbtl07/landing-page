@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Send, PlusCircle } from 'lucide-react';
+import { X, Send, PlusCircle, ShieldCheck } from 'lucide-react';
 import { EventItem, EventCategory, EventBenefit } from '@/types';
 import { calculateDaysRemaining } from '@/utils';
 
@@ -107,7 +107,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       organizerType: 'club',
       category,
       categoryLabel: categoryLabels[category],
-      targetAudience: isFreshman ? 'Sinh viên toàn trường (Đặc biệt chào đón K58)' : 'Toàn thể sinh viên ULIS',
+      targetAudience: isFreshman ? 'Sinh viên K57 - K60 toàn trường (Đặc biệt chào đón K60)' : 'Toàn thể sinh viên ULIS (K57 - K60)',
       isFreshmanFriendly: isFreshman,
       benefits: benefitsArray,
       benefitBadges: benefitBadges.length > 0 ? benefitBadges : ['+Điểm rèn luyện', 'Có Certificate'],
@@ -122,8 +122,8 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       location: location.trim() || 'Trường ĐH Ngoại ngữ - ĐHQGHN',
       isOnline: location.toLowerCase().includes('online') || location.toLowerCase().includes('zoom'),
       bannerGradient: randomGradient,
-      bannerTheme: 'Sự kiện do BTC đóng góp',
-      bannerTag: 'HOẠT ĐỘNG MỚI ĐĂNG TẢI',
+      bannerTheme: 'Sự kiện do BTC/CLB gửi đăng tải',
+      bannerTag: 'ĐÃ DUYỆT BỞI BAN BIÊN TẬP',
       shortDesc: shortDesc.trim() || 'Chương trình được tiếp nhận trực tiếp từ đơn vị tổ chức và kiểm duyệt hiển thị trên Radar.',
       fullDesc: fullDesc.trim() || (shortDesc.trim() || 'Thông tin hoạt động được cập nhật liên tục từ Ban Tổ chức.'),
       detailedBenefits: [
@@ -143,7 +143,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       reviews: [
         {
           id: `rev-new-${Date.now()}`,
-          author: 'Ban Kiểm Duyệt Radar',
+          author: 'Ban Biên Tập Radar',
           faculty: 'Nhóm CNTT&TT 73',
           batch: 'ULIS',
           avatar: 'RD',
@@ -188,10 +188,11 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
             </div>
             <div>
               <h3 id="modal-submit-event-title" className="text-lg font-bold">
-                Gửi thông tin sự kiện / Cuộc thi
+                Cổng tiếp nhận thông tin (Dành cho CLB / BTC)
               </h3>
-              <p className="text-xs text-blue-100">
-                Kênh tiếp nhận 2 chiều dành cho CLB, Đoàn - Hội và Ban tổ chức
+              <p className="text-xs text-blue-100 flex items-center gap-1.5 mt-0.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" aria-hidden="true" />
+                <span>Kiểm duyệt & bảo trợ truyền thông bởi Ban biên tập Nhóm 73</span>
               </p>
             </div>
           </div>
@@ -208,6 +209,10 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 text-xs sm:text-sm">
           
+          <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-xs text-blue-900 leading-relaxed">
+            ℹ️ <strong>Dành cho Ban tổ chức / CLB:</strong> Điền thông tin sự kiện để thông báo đến toàn thể sinh viên các khóa K57 – K60 tại ULIS. Mọi thông tin gửi về sẽ được Ban biên tập Nhóm 73 kiểm duyệt và hiển thị trực tiếp lên Radar.
+          </div>
+
           {errorMsg && (
             <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 font-medium text-xs">
               ⚠️ {errorMsg}
@@ -377,7 +382,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
                   onChange={(e) => setIsFreshman(e.target.checked)}
                   className="rounded text-[#003B73] focus:ring-blue-500 w-4 h-4"
                 />
-                <span>Hoạt động đặc biệt thân thiện với Tân sinh viên K58</span>
+                <span>Hoạt động đặc biệt thân thiện với Tân sinh viên K60</span>
               </label>
             </div>
           </div>
@@ -441,7 +446,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
               className="min-h-[44px] flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#003B73] via-[#0B4F9F] to-[#1E88E5] hover:opacity-95 shadow-md shadow-blue-900/15 cursor-pointer"
             >
               <Send className="w-4 h-4 text-blue-200" aria-hidden="true" />
-              <span>Đăng tải lên Radar ngay</span>
+              <span>Gửi duyệt & Đăng tải</span>
             </button>
           </div>
 

@@ -30,7 +30,7 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
 }) => {
   const quickFilters = [
     { id: 'all', label: 'Tất cả cơ hội', icon: Compass },
-    { id: 'freshman', label: 'Dành cho SV năm nhất (K58)', icon: GraduationCap },
+    { id: 'freshman', label: 'Dành cho SV năm nhất (K60)', icon: GraduationCap },
     { id: 'points', label: 'Tích lũy Điểm rèn luyện', icon: Award },
     { id: 'cert', label: 'Săn Certificate làm CV', icon: FileCheck2 },
     { id: 'culture', label: 'Giao lưu Văn hóa & Ngôn ngữ', icon: Globe2 },
@@ -100,8 +100,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               <Award className="w-4 h-4" aria-hidden="true" />
               <span className="text-xs font-semibold uppercase tracking-wider">Quyền lợi</span>
             </div>
-            <div className="text-xl font-extrabold text-slate-900">ĐRL & Chứng nhận</div>
-            <div className="text-xs text-slate-500">Minh bạch mốc điểm & Certificate</div>
+            <div className="text-xl font-extrabold text-slate-900">ĐRL & Certificate</div>
+            <div className="text-xs text-slate-500">Minh bạch mốc điểm & Chứng nhận</div>
           </div>
 
           <div className="bg-white/90 backdrop-blur-xs p-3.5 rounded-2xl border border-slate-200/90 shadow-xs hover:border-blue-300 transition-colors">
@@ -109,8 +109,8 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
               <GraduationCap className="w-4 h-4" aria-hidden="true" />
               <span className="text-xs font-semibold uppercase tracking-wider">Phục vụ</span>
             </div>
-            <div className="text-xl font-extrabold text-slate-900">K55 — K58</div>
-            <div className="text-xs text-slate-500">Đặc biệt tối ưu cho Tân sinh viên</div>
+            <div className="text-xl font-extrabold text-slate-900">K57 — K60</div>
+            <div className="text-xs text-slate-500">Đặc biệt tối ưu cho Tân SV K60</div>
           </div>
         </div>
 

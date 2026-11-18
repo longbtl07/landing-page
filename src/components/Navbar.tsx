@@ -6,7 +6,6 @@ import {
   ShieldCheck, 
   CalendarDays, 
   Users, 
-  PlusCircle, 
   Menu, 
   X, 
   Bookmark
@@ -15,13 +14,11 @@ import {
 interface NavbarProps {
   savedCount: number;
   onOpenSavedDrawer: () => void;
-  onOpenSubmitModal: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   savedCount,
   onOpenSavedDrawer,
-  onOpenSubmitModal,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -50,7 +47,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
                 <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-100/80 text-[#003B73] border border-blue-200">
                   <Radio className="w-3 h-3 text-blue-600 animate-pulse" aria-hidden="true" />
-                  Live Beta
+                  Live Portal
                 </span>
               </div>
               <span className="text-xs text-slate-500 font-medium hidden sm:block">
@@ -60,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1.5">
+          <nav className="hidden md:flex items-center gap-2">
             <a
               href="#radar-feed"
               className="min-h-[44px] flex items-center px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#003B73] hover:bg-slate-100/80 rounded-xl transition-all"
@@ -79,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={onOpenSavedDrawer}
               aria-label={`Mở ngăn kéo Lịch đã lưu, hiện có ${savedCount} sự kiện`}
-              className="min-h-[44px] relative flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#003B73] hover:bg-blue-50/80 rounded-xl transition-all group cursor-pointer"
+              className="min-h-[44px] relative flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-700 hover:text-[#003B73] bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200 rounded-xl transition-all group cursor-pointer ml-1"
             >
               <Bookmark className={`w-4 h-4 transition-colors ${savedCount > 0 ? 'text-[#1E88E5] fill-[#1E88E5]' : 'text-slate-500'}`} aria-hidden="true" />
               <span>Lịch đã lưu</span>
@@ -93,20 +90,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </nav>
 
-          {/* Action CTA Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={onOpenSubmitModal}
-              aria-label="Gửi thông tin sự kiện mới dành cho Ban tổ chức hoặc CLB"
-              className="min-h-[44px] flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-[#003B73] via-[#0B4F9F] to-[#1E88E5] hover:opacity-95 shadow-md shadow-blue-900/15 hover:shadow-lg transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <PlusCircle className="w-4 h-4 text-blue-200" aria-hidden="true" />
-              <span>Gửi thông tin sự kiện</span>
-            </button>
-          </div>
-
           {/* Mobile Menu & Drawer Toggle */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 md:hidden">
             <button
               onClick={onOpenSavedDrawer}
               aria-label={`Lịch đã lưu (${savedCount} sự kiện)`}
@@ -134,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-3 shadow-xl animate-in slide-in-from-top-2">
+        <div className="md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2">
           <div className="flex flex-col space-y-1">
             <a
               href="#radar-feed"
@@ -168,19 +153,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {savedCount} sự kiện
                 </span>
               )}
-            </button>
-          </div>
-
-          <div className="pt-2 border-t border-slate-100">
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenSubmitModal();
-              }}
-              className="min-h-[44px] w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm text-white bg-gradient-to-r from-[#003B73] to-[#0B4F9F] shadow-md shadow-blue-900/15 cursor-pointer"
-            >
-              <PlusCircle className="w-4 h-4" aria-hidden="true" />
-              <span>Gửi thông tin sự kiện (BTC / CLB)</span>
             </button>
           </div>
         </div>

@@ -9,10 +9,15 @@ import {
   ExternalLink, 
   GraduationCap, 
   Compass,
-  Radio
+  Radio,
+  PlusCircle
 } from 'lucide-react';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenSubmitModal: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenSubmitModal }) => {
   return (
     <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 pt-14 pb-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +43,7 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md">
-              Sáng kiến giải quyết triệt để tình trạng phân tán thông tin trên nhiều fanpage CLB, hỗ trợ sinh viên ULIS không bỏ lỡ các mốc hạn chót, tối ưu hóa điểm rèn luyện và săn chứng nhận hoàn thiện CV học thuật.
+              Sáng kiến giải quyết triệt để tình trạng phân tán thông tin trên nhiều fanpage CLB, hỗ trợ sinh viên ULIS (K57 – K60) không bỏ lỡ các mốc hạn chót, tối ưu hóa điểm rèn luyện và săn chứng nhận hoàn thiện CV học thuật.
             </p>
 
             <div className="p-3.5 rounded-2xl bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300 space-y-1.5 max-w-md">
@@ -64,7 +69,7 @@ export const Footer: React.FC = () => {
             </h4>
             
             <p className="text-xs text-slate-400 leading-relaxed">
-              Dành cho các Câu lạc bộ, Liên chi Đoàn các Khoa và đối tác doanh nghiệp có nhu cầu phối hợp đăng tải và truyền thông hoạt động:
+              Dành cho các Câu lạc bộ, Liên chi Đoàn các Khoa và đối tác có nhu cầu phối hợp đăng tải và truyền thông hoạt động:
             </p>
 
             <div className="space-y-2.5 text-xs sm:text-sm">
@@ -107,6 +112,18 @@ export const Footer: React.FC = () => {
                   </a>
                 </div>
               </div>
+            </div>
+
+            {/* Dedicated Club / Organizer Submission CTA */}
+            <div className="pt-2">
+              <button
+                onClick={onOpenSubmitModal}
+                aria-label="Mở cổng gửi thông tin hoạt động dành cho Ban tổ chức và CLB"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs text-blue-300 bg-blue-950/80 hover:bg-blue-900 border border-blue-700/80 transition-all cursor-pointer shadow-sm hover:text-white"
+              >
+                <PlusCircle className="w-4 h-4 text-blue-400" aria-hidden="true" />
+                <span>Gửi thông tin sự kiện (Dành cho CLB / BTC)</span>
+              </button>
             </div>
           </div>
 

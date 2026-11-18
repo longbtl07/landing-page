@@ -10,7 +10,8 @@ import {
   ArrowUpRight, 
   Download, 
   Clock, 
-  Compass
+  Compass,
+  CheckCircle2
 } from 'lucide-react';
 import { EventItem } from '@/types';
 
@@ -95,6 +96,15 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
           >
             <X className="w-5 h-5" aria-hidden="true" />
           </button>
+        </div>
+
+        {/* Zero-friction Info Banner */}
+        <div className="px-5 py-3 bg-blue-50/80 border-b border-blue-100 flex items-start gap-2.5 text-xs text-blue-900 shrink-0">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <span className="font-semibold block">Trải nghiệm không cần tài khoản:</span>
+            <span>Dữ liệu lịch được lưu tự động trên trình duyệt của bạn. Bấm &ldquo;Xuất lịch cá nhân&rdquo; để đồng bộ vào Google/Apple Calendar.</span>
+          </div>
         </div>
 
         {/* Drawer Body */}

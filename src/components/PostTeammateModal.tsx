@@ -19,7 +19,7 @@ export const PostTeammateModal: React.FC<PostTeammateModalProps> = ({
 }) => {
   const [authorName, setAuthorName] = useState('');
   const [faculty, setFaculty] = useState('Khoa Sư phạm Tiếng Anh');
-  const [batch, setBatch] = useState('K58');
+  const [batch, setBatch] = useState('K60');
   const [targetEventTitle, setTargetEventTitle] = useState(availableEvents[0]?.title || '');
   const [customEvent, setCustomEvent] = useState('');
   const [skillsInput, setSkillsInput] = useState('');
@@ -123,7 +123,7 @@ export const PostTeammateModal: React.FC<PostTeammateModalProps> = ({
                 Đăng tin tìm đồng đội dự thi
               </h3>
               <p className="text-xs text-blue-100">
-                Kết nối với sinh viên các Khoa, ghép team học thuật & tranh biện
+                Kết nối với sinh viên các Khoa K57 — K60, ghép team học thuật & tranh biện
               </p>
             </div>
           </div>
@@ -170,10 +170,10 @@ export const PostTeammateModal: React.FC<PostTeammateModalProps> = ({
                 onChange={(e) => setBatch(e.target.value)}
                 className="w-full px-3 py-2 min-h-[44px] rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-[#003B73]"
               >
-                <option value="K58">K58 (Tân sinh viên)</option>
-                <option value="K57">K57 (Sinh viên năm 2)</option>
-                <option value="K56">K56 (Sinh viên năm 3)</option>
-                <option value="K55">K55 (Sinh viên năm cuối)</option>
+                <option value="K60">K60 (Tân sinh viên - Năm 1)</option>
+                <option value="K59">K59 (Sinh viên năm 2)</option>
+                <option value="K58">K58 (Sinh viên năm 3)</option>
+                <option value="K57">K57 (Sinh viên năm 4)</option>
               </select>
             </div>
 
