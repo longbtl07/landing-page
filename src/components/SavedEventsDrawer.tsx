@@ -1,24 +1,26 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { 
-  X, 
-  Bookmark, 
-  Bell, 
-  BellRing, 
-  Trash2, 
-  ArrowUpRight, 
-  Download, 
-  Clock, 
+import React from 'react';
+import {
+  X,
+  Bookmark,
+  Bell,
+  BellRing,
+  Trash2,
+  ArrowUpRight,
+  Download,
   Compass,
   CheckCircle2
 } from 'lucide-react';
 import { EventItem } from '@/types';
+import { useModal } from '@/utils/useModal';
+import { DeadlineBadge } from '@/components/EventCard';
 
 interface SavedEventsDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   savedEvents: EventItem[];
+  now: number | null;
   savedSettings: Record<string, boolean>; // eventId -> reminder24h
   onToggleReminder: (eventId: string) => void;
   onRemoveSaved: (eventId: string) => void;
@@ -30,26 +32,14 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
   isOpen,
   onClose,
   savedEvents,
+  now,
   savedSettings,
   onToggleReminder,
   onRemoveSaved,
   onSelectEvent,
   onExportCalendar,
 }) => {
-  // ESC key listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const panelRef = useModal<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -69,7 +59,7 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
       />
 
       {/* Slide-over Drawer Panel */}
-      <div className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-300">
+      <div ref={panelRef} className="relative w-full max-w-md bg-white h-full shadow-2xl flex flex-col z-10 animate-in slide-in-from-right duration-300">
         
         {/* Drawer Header */}
         <div className="p-5 bg-gradient-to-r from-[#003B73] to-[#0B4F9F] text-white flex items-center justify-between shrink-0">
@@ -103,7 +93,7 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
           <div>
             <span className="font-semibold block">Trải nghiệm không cần tài khoản:</span>
-            <span>Dữ liệu lịch được lưu tự động trên trình duyệt của bạn. Bấm &ldquo;Xuất lịch cá nhân&rdquo; để đồng bộ vào Google/Apple Calendar.</span>
+            <span>Danh sách lưu trên trình duyệt của bạn. Bấm &ldquo;Xuất lịch&rdquo; để đưa hạn chót vào Google/Apple Calendar; sự kiện bật nhắc sẽ được lịch báo trước 24h.</span>
           </div>
         </div>
 
@@ -118,7 +108,7 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
                 Lịch theo dõi của bạn đang trống
               </h4>
               <p className="text-xs text-slate-500 max-w-xs mb-6 leading-relaxed">
-                Hãy bấm nút &quot;Lưu lịch / Nhắc deadline&quot; trên bất kỳ thẻ sự kiện nào trên Radar để không bao giờ bỏ lỡ thời hạn đóng đơn!
+                Bấm nút &quot;Lưu&quot; trên thẻ sự kiện để theo dõi hạn đóng đơn tại đây.
               </p>
               <button
                 onClick={onClose}
@@ -137,43 +127,28 @@ export const SavedEventsDrawer: React.FC<SavedEventsDrawerProps> = ({
                   className="bg-slate-50/90 rounded-2xl border border-slate-200 p-4 hover:border-blue-300 transition-all shadow-xs"
                 >
                   {/* Top info */}
-                  <div className="flex items-start justify-between gap-2 mb-2">
-                    <span className="text-[11px] font-bold text-[#003B73] bg-blue-100/70 px-2 py-0.5 rounded">
-                      {evt.organizer}
-                    </span>
-                    {evt.isUrgent ? (
-                      <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 flex items-center gap-1">
-                        <Clock className="w-3 h-3" aria-hidden="true" />
-                        Còn {evt.daysRemaining} ngày
-                      </span>
-                    ) : (
-                      <span className="text-[11px] text-slate-500 font-medium">
-                        Hạn: {evt.deadlineFormatted.split(' ')[0]}
-                      </span>
-                    )}
+                  <div className="mb-2">
+                    <DeadlineBadge event={evt} now={now} />
                   </div>
 
                   {/* Title */}
-                  <h4 
-                    onClick={() => {
-                      onClose();
-                      onSelectEvent(evt);
-                    }}
-                    className="text-sm font-bold text-slate-900 hover:text-[#003B73] cursor-pointer line-clamp-2 leading-snug mb-2.5"
-                  >
+                  <h4 className="text-sm font-bold text-slate-900 line-clamp-2 leading-snug mb-1">
                     {evt.title}
                   </h4>
+                  <p className="text-[11px] font-semibold text-[#003B73] truncate mb-2.5">
+                    {evt.organizer}
+                  </p>
 
                   {/* Reminder 24h Toggle Switch */}
                   <div className="flex items-center justify-between py-2 px-3 rounded-xl bg-white border border-slate-200/80 mb-3 text-xs">
                     <div className="flex items-center gap-2">
                       {reminderActive ? (
-                        <BellRing className="w-4 h-4 text-blue-600 animate-bounce" aria-hidden="true" />
+                        <BellRing className="w-4 h-4 text-blue-600" aria-hidden="true" />
                       ) : (
                         <Bell className="w-4 h-4 text-slate-400" aria-hidden="true" />
                       )}
                       <span className="font-semibold text-slate-700">
-                        Nhắc nhở trước 24h:
+                        Nhắc trước 24h (trong file .ics):
                       </span>
                     </div>
 

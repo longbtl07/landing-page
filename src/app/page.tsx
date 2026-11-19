@@ -15,21 +15,33 @@ import { Footer } from '@/components/Footer';
 
 import { INITIAL_EVENTS, INITIAL_TEAMMATES } from '@/data/mockData';
 import { EventItem, EventBenefit, TeammatePost, ToastMessage } from '@/types';
-import { normalizeVietnamese } from '@/utils';
+import { normalizeVietnamese, shorten, getDeadlineDate, getDeadlineInfo, buildIcs } from '@/utils';
 import { Radio, SearchX, BookmarkCheck } from 'lucide-react';
+
+const byDeadline = (a: EventItem, b: EventItem) => getDeadlineDate(a).getTime() - getDeadlineDate(b).getTime();
 
 export default function Home() {
   // Main Data States
   const [events, setEvents] = useState<EventItem[]>(INITIAL_EVENTS);
   const [teammates, setTeammates] = useState<TeammatePost[]>(INITIAL_TEAMMATES);
-  
-  // Saved Events State (IDs + reminders)
-  const [savedEventIds, setSavedEventIds] = useState<string[]>(['ulis-debate-2026', 'ulis-ielts-cv-workshop']);
-  const [savedSettings, setSavedSettings] = useState<Record<string, boolean>>({
-    'ulis-debate-2026': true,
-    'ulis-ielts-cv-workshop': true,
-  });
+
+  // Saved Events State (IDs + reminders). New visitors start with nothing saved.
+  const [savedEventIds, setSavedEventIds] = useState<string[]>([]);
+  const [savedSettings, setSavedSettings] = useState<Record<string, boolean>>({});
   const [isHydrated, setIsHydrated] = useState(false);
+
+  // Current time, set only on the client (null during prerender) so countdowns are always live
+  const [now, setNow] = useState<number | null>(null);
+
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    const first = setTimeout(tick, 0);
+    const interval = setInterval(tick, 60_000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(interval);
+    };
+  }, []);
 
   // Hydrate from localStorage on client mount (Zero friction guest persistence)
   useEffect(() => {
@@ -77,6 +89,21 @@ export default function Home() {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isPostTeammateModalOpen, setIsPostTeammateModalOpen] = useState(false);
 
+  // Open the event named in a shared link (/#event-<id>)
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = window.location.hash.match(/^#event-(.+)$/)?.[1];
+      const found = id && INITIAL_EVENTS.find((e) => e.id === decodeURIComponent(id));
+      if (found) setSelectedEvent(found);
+    };
+    const first = setTimeout(openFromHash, 0);
+    window.addEventListener('hashchange', openFromHash);
+    return () => {
+      clearTimeout(first);
+      window.removeEventListener('hashchange', openFromHash);
+    };
+  }, []);
+
   // Toast System
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
@@ -94,31 +121,44 @@ export default function Home() {
     const isCurrentlySaved = savedEventIds.includes(event.id);
     if (isCurrentlySaved) {
       setSavedEventIds((prev) => prev.filter((id) => id !== event.id));
-      addToast('info', 'Đã bỏ lưu sự kiện', `Đã xóa "${event.title.substring(0, 35)}..." khỏi Lịch cá nhân.`);
+      addToast('info', 'Đã bỏ lưu sự kiện', `Đã xóa "${shorten(event.title)}" khỏi Lịch cá nhân.`);
     } else {
       setSavedEventIds((prev) => [...prev, event.id]);
       setSavedSettings((prev) => ({ ...prev, [event.id]: true }));
-      addToast('success', 'Đã lưu vào Lịch cá nhân ✓', `Đã bật nhắc nhở trước hạn chót 24h cho "${event.title.substring(0, 35)}...".`);
+      addToast('success', 'Đã lưu vào Lịch cá nhân ✓', `"${shorten(event.title)}". Mở "Lịch đã lưu" và xuất .ics để điện thoại nhắc trước 24h.`);
     }
   };
 
-  // Toggle 24h Reminder Switch in Drawer
+  // Toggle 24h Reminder Switch in Drawer (applied as a VALARM in the exported .ics)
   const handleToggleReminder = (eventId: string) => {
     const current = savedSettings[eventId] ?? true;
     const nextState = !current;
     setSavedSettings((prev) => ({ ...prev, [eventId]: nextState }));
     addToast(
       nextState ? 'success' : 'info',
-      nextState ? 'Đã bật nhắc nhở 24h' : 'Đã tắt nhắc nhở',
-      nextState ? 'Hệ thống sẽ gửi thông báo trước hạn đóng đơn 1 ngày.' : 'Đã tắt thông báo tự động cho sự kiện này.'
+      nextState ? 'Đã bật nhắc trước 24h' : 'Đã tắt nhắc nhở',
+      nextState ? 'Lời nhắc sẽ có trong file .ics khi bạn xuất lịch.' : 'File .ics xuất ra sẽ không kèm lời nhắc cho sự kiện này.'
     );
   };
 
   // Remove from saved list in Drawer
   const handleRemoveSaved = (eventId: string) => {
     setSavedEventIds((prev) => prev.filter((id) => id !== eventId));
+    setSavedSettings((prev) => {
+      const next = { ...prev };
+      delete next[eventId];
+      return next;
+    });
     addToast('info', 'Đã bỏ theo dõi', 'Sự kiện đã được xóa khỏi Lịch đã lưu.');
   };
+
+  // Close detail modal and drop the #event-<id> hash so the URL stays clean
+  const handleCloseEvent = useCallback(() => {
+    setSelectedEvent(null);
+    if (window.location.hash.startsWith('#event-')) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, []);
 
   // Share Event Link
   const handleShareEvent = (event: EventItem) => {
@@ -142,13 +182,13 @@ export default function Home() {
   // Add new event from BTC Submit Modal
   const handleAddCustomEvent = (newEvent: EventItem) => {
     setEvents((prev) => [newEvent, ...prev]);
-    addToast('success', 'Đăng tải sự kiện thành công! 🎉', `Hoạt động "${newEvent.title.substring(0, 35)}..." đã xuất hiện trên Radar.`);
+    addToast('info', 'Đã thêm vào Radar (bản demo)', `"${shorten(newEvent.title)}" chỉ hiển thị trên trình duyệt này và sẽ mất khi tải lại trang, vì chưa có máy chủ lưu trữ.`);
   };
 
   // Add new teammate post
   const handleAddTeammatePost = (newPost: TeammatePost) => {
     setTeammates((prev) => [newPost, ...prev]);
-    addToast('success', 'Đăng tin tìm đồng đội thành công! 🤝', 'Tin của bạn đã hiển thị trên Sàn ghép đội dự thi.');
+    addToast('info', 'Đã thêm tin tìm đồng đội (bản demo)', 'Tin chỉ hiển thị trên trình duyệt này và sẽ mất khi tải lại trang.');
   };
 
   // Export iCalendar (.ics) file
@@ -156,23 +196,7 @@ export default function Home() {
     const savedList = events.filter((e) => savedEventIds.includes(e.id));
     if (savedList.length === 0) return;
 
-    let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//ULIS Events Radar//VN\nCALSCALE:GREGORIAN\n";
-    
-    savedList.forEach((e) => {
-      const cleanDate = e.deadline.replace(/-/g, '');
-      icsContent += "BEGIN:VEVENT\n";
-      icsContent += `SUMMARY:[Hạn chót ULIS] ${e.title.replace(/,/g, '\\,')}\n`;
-      icsContent += `DESCRIPTION:${e.shortDesc.replace(/\n/g, ' ')} - Đơn vị: ${e.organizer}\n`;
-      icsContent += `LOCATION:${e.location}\n`;
-      icsContent += `DTSTART;VALUE=DATE:${cleanDate}\n`;
-      icsContent += `DTEND;VALUE=DATE:${cleanDate}\n`;
-      icsContent += `STATUS:CONFIRMED\n`;
-      icsContent += "END:VEVENT\n";
-    });
-
-    icsContent += "END:VCALENDAR";
-
-    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const blob = new Blob([buildIcs(savedList, savedSettings)], { type: 'text/calendar;charset=utf-8' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -199,7 +223,8 @@ export default function Home() {
 
   // Filtered & Sorted Events
   const filteredEvents = useMemo(() => {
-    let result = [...events];
+    // Closed deadlines drop out of the feed (only once the client clock is known)
+    let result = now === null ? [...events] : events.filter((e) => !getDeadlineInfo(e, now).isExpired);
 
     // 1. Vietnamese Diacritics-Insensitive Search
     if (searchQuery.trim()) {
@@ -247,7 +272,7 @@ export default function Home() {
     // 5. Sorting
     result.sort((a, b) => {
       if (sortBy === 'deadline') {
-        return a.daysRemaining - b.daysRemaining;
+        return byDeadline(a, b);
       }
       if (sortBy === 'popular') {
         return b.viewsCount - a.viewsCount;
@@ -261,11 +286,11 @@ export default function Home() {
     });
 
     return result;
-  }, [events, searchQuery, quickFilter, category, benefit, sortBy]);
+  }, [events, now, searchQuery, quickFilter, category, benefit, sortBy]);
 
-  // Saved Event Objects
+  // Saved Event Objects, soonest deadline first
   const savedEventsList = useMemo(() => {
-    return events.filter((e) => savedEventIds.includes(e.id));
+    return events.filter((e) => savedEventIds.includes(e.id)).sort(byDeadline);
   }, [events, savedEventIds]);
 
   return (
@@ -285,10 +310,11 @@ export default function Home() {
           onSearchChange={setSearchQuery}
           quickFilter={quickFilter}
           onQuickFilterChange={setQuickFilter}
+          resultCount={filteredEvents.length}
         />
 
         {/* Main Event Radar Feed Section */}
-        <section id="radar-feed" className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
+        <section id="radar-feed" className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
           
           {/* Feed Title */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
@@ -297,7 +323,7 @@ export default function Home() {
                 <Radio className="w-5 h-5 text-blue-700 animate-pulse" aria-hidden="true" />
               </div>
               <div>
-                <h2 className="text-2xl font-extrabold text-[#003B73] tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#003B73] tracking-tight">
                   Bảng tin Radar Sự kiện & Cuộc thi
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500">
@@ -327,18 +353,18 @@ export default function Home() {
             sortBy={sortBy}
             onSortByChange={setSortBy}
             totalFiltered={filteredEvents.length}
-            totalEvents={events.length}
             onResetFilters={handleResetFilters}
             hasActiveFilters={hasActiveFilters}
           />
 
           {/* Event Cards Grid */}
           {filteredEvents.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredEvents.map((event) => (
                 <EventCard
                   key={event.id}
                   event={event}
+                  now={now}
                   isSaved={savedEventIds.includes(event.id)}
                   onToggleSave={handleToggleSave}
                   onSelectEvent={setSelectedEvent}
@@ -385,8 +411,9 @@ export default function Home() {
       {/* Event Detail Modal */}
       <EventDetailModal
         event={selectedEvent}
+        now={now}
         isOpen={!!selectedEvent}
-        onClose={() => setSelectedEvent(null)}
+        onClose={handleCloseEvent}
         isSaved={selectedEvent ? savedEventIds.includes(selectedEvent.id) : false}
         onToggleSave={handleToggleSave}
         onShare={handleShareEvent}
@@ -397,6 +424,7 @@ export default function Home() {
         isOpen={isSavedDrawerOpen}
         onClose={() => setIsSavedDrawerOpen(false)}
         savedEvents={savedEventsList}
+        now={now}
         savedSettings={savedSettings}
         onToggleReminder={handleToggleReminder}
         onRemoveSaved={handleRemoveSaved}

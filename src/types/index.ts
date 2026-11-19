@@ -46,8 +46,6 @@ export interface EventItem {
   hasPrize: boolean;
   deadline: string; // YYYY-MM-DD
   deadlineFormatted: string;
-  daysRemaining: number;
-  isUrgent: boolean;
   eventDate: string;
   location: string;
   isOnline: boolean;

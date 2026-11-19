@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Send, PlusCircle, ShieldCheck } from 'lucide-react';
 import { EventItem, EventCategory, EventBenefit } from '@/types';
-import { calculateDaysRemaining } from '@/utils';
+import { todayISO } from '@/utils';
+import { useModal } from '@/utils/useModal';
 
 interface SubmitEventModalProps {
   isOpen: boolean;
@@ -19,9 +20,9 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
   const [title, setTitle] = useState('');
   const [organizer, setOrganizer] = useState('');
   const [category, setCategory] = useState<EventCategory>('workshop');
-  const [deadline, setDeadline] = useState('2026-11-25');
-  const [eventDate, setEventDate] = useState('28/11/2026');
-  const [location, setLocation] = useState('Hội trường Vũ Đình Liên, ULIS');
+  const [deadline, setDeadline] = useState('');
+  const [eventDate, setEventDate] = useState('');
+  const [location, setLocation] = useState('');
   const [shortDesc, setShortDesc] = useState('');
   const [fullDesc, setFullDesc] = useState('');
   const [registrationUrl, setRegistrationUrl] = useState('');
@@ -35,22 +36,11 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
   const [benefitInternship, setBenefitInternship] = useState(false);
   const [isFreshman, setIsFreshman] = useState(true);
 
-  // ESC key listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const panelRef = useModal<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen) return null;
+
+  const minDeadline = todayISO();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +48,10 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
 
     if (!title.trim() || !organizer.trim() || !deadline) {
       setErrorMsg('Vui lòng điền đầy đủ tên hoạt động, đơn vị tổ chức và hạn chót đăng ký!');
+      return;
+    }
+    if (deadline < minDeadline) {
+      setErrorMsg('Hạn chót đóng đơn không thể là ngày trong quá khứ.');
       return;
     }
 
@@ -89,8 +83,6 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       recruitment: 'Tuyển thành viên CLB',
     };
 
-    const daysRemaining = calculateDaysRemaining(deadline);
-
     const gradients = [
       'from-blue-700 via-sky-800 to-indigo-900',
       'from-emerald-700 via-teal-800 to-cyan-900',
@@ -116,15 +108,13 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       hasPrize: benefitPrize,
       deadline,
       deadlineFormatted: `${deadline.split('-').reverse().join('/')} (23:59)`,
-      daysRemaining,
-      isUrgent: daysRemaining <= 3,
       eventDate: eventDate.trim() || 'Sẽ thông báo chi tiết',
       location: location.trim() || 'Trường ĐH Ngoại ngữ - ĐHQGHN',
       isOnline: location.toLowerCase().includes('online') || location.toLowerCase().includes('zoom'),
       bannerGradient: randomGradient,
       bannerTheme: 'Sự kiện do BTC/CLB gửi đăng tải',
-      bannerTag: 'ĐÃ DUYỆT BỞI BAN BIÊN TẬP',
-      shortDesc: shortDesc.trim() || 'Chương trình được tiếp nhận trực tiếp từ đơn vị tổ chức và kiểm duyệt hiển thị trên Radar.',
+      bannerTag: 'CHỜ BAN BIÊN TẬP DUYỆT',
+      shortDesc: shortDesc.trim() || 'Chương trình do đơn vị tổ chức gửi lên Radar, đang chờ Ban biên tập kiểm duyệt.',
       fullDesc: fullDesc.trim() || (shortDesc.trim() || 'Thông tin hoạt động được cập nhật liên tục từ Ban Tổ chức.'),
       detailedBenefits: [
         benefitPoints ? 'Cộng điểm rèn luyện theo quy chế của Đoàn trường và Phòng CT&CTSV.' : 'Cộng điểm rèn luyện tham gia hoạt động.',
@@ -132,30 +122,18 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
         'Mở rộng mạng lưới kết nối bạn bè tại Trường ĐH Ngoại ngữ - ĐHQGHN.'
       ],
       timeline: [
-        { stage: 'Đóng đơn đăng ký', time: deadline, desc: 'Hạn cuối tiếp nhận hồ sơ thí sinh/người tham dự' },
-        { stage: 'Diễn ra chương trình chính thức', time: eventDate, desc: 'Tổ chức tại địa điểm công bố' }
+        { stage: 'Đóng đơn đăng ký', time: deadline.split('-').reverse().join('/'), desc: 'Hạn cuối tiếp nhận hồ sơ thí sinh/người tham dự' },
+        { stage: 'Diễn ra chương trình chính thức', time: eventDate.trim() || 'Sẽ thông báo', desc: 'Tổ chức tại địa điểm công bố' }
       ],
-      registrationUrl: registrationUrl.trim() || 'https://forms.gle/ulis-radar-demo',
-      contactEmail: contactEmail.trim() || 'btc.event@ulis.vnu.edu.vn',
-      contactFanpage: 'facebook.com/ulis.radar',
-      rating: 5.0,
-      reviewCount: 1,
-      reviews: [
-        {
-          id: `rev-new-${Date.now()}`,
-          author: 'Ban Biên Tập Radar',
-          faculty: 'Nhóm CNTT&TT 73',
-          batch: 'ULIS',
-          avatar: 'RD',
-          rating: 5,
-          comment: 'Hoạt động đã được xác thực thông tin chính xác từ BTC. Chúc các bạn sinh viên có trải nghiệm tuyệt vời!',
-          season: 'Mùa 2026',
-          date: 'Hôm nay'
-        }
-      ],
+      registrationUrl: registrationUrl.trim(),
+      contactEmail: contactEmail.trim(),
+      contactFanpage: '',
+      rating: 0,
+      reviewCount: 0,
+      reviews: [],
       tags: ['Sự kiện mới', categoryLabels[category], 'ULIS Radar'],
       createdAt: new Date().toISOString(),
-      viewsCount: 12,
+      viewsCount: 0,
     };
 
     onSubmitEvent(newEvent);
@@ -178,7 +156,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
+      <div ref={panelRef} className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
         
         {/* Header */}
         <div className="p-6 bg-gradient-to-r from-[#003B73] via-[#0B4F9F] to-[#1E88E5] text-white flex items-center justify-between">
@@ -279,6 +257,7 @@ export const SubmitEventModal: React.FC<SubmitEventModalProps> = ({
                 id="evt-deadline"
                 type="date"
                 required
+                min={minDeadline}
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
                 className="w-full px-3 py-2 min-h-[44px] rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-[#003B73]"

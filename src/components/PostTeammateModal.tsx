@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Users, Send } from 'lucide-react';
 import { TeammatePost, EventItem } from '@/types';
+import { useModal } from '@/utils/useModal';
 
 interface PostTeammateModalProps {
   isOpen: boolean;
@@ -31,20 +32,7 @@ export const PostTeammateModal: React.FC<PostTeammateModalProps> = ({
   const [contactFacebook, setContactFacebook] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Handle ESC
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const panelRef = useModal<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -110,7 +98,7 @@ export const PostTeammateModal: React.FC<PostTeammateModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
+      <div ref={panelRef} className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
         
         {/* Header */}
         <div className="p-6 bg-gradient-to-r from-[#003B73] to-[#0B4F9F] text-white flex items-center justify-between">
