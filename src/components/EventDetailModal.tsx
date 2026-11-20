@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   Calendar, 
@@ -19,9 +19,18 @@ import {
   Info
 } from 'lucide-react';
 import { EventItem } from '@/types';
+import { getDeadlineInfo } from '@/utils';
+import { useModal } from '@/utils/useModal';
+
+const TABS = [
+  { id: 'details', label: 'Thông tin chi tiết & Quyền lợi' },
+  { id: 'timeline', label: 'Lộ trình & Mốc thời gian' },
+  { id: 'reviews', label: 'Review từ mùa trước' },
+] as const;
 
 interface EventDetailModalProps {
   event: EventItem | null;
+  now: number | null;
   isOpen: boolean;
   onClose: () => void;
   isSaved: boolean;
@@ -31,30 +40,20 @@ interface EventDetailModalProps {
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({
   event,
+  now,
   isOpen,
   onClose,
   isSaved,
   onToggleSave,
   onShare,
 }) => {
-  const [activeTab, setActiveTab] = useState<'details' | 'timeline' | 'reviews'>('details');
-
-  // Handle ESC key to close
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]['id']>('details');
+  const panelRef = useModal<HTMLDivElement>(isOpen, onClose);
 
   if (!isOpen || !event) return null;
+
+  const deadline = getDeadlineInfo(event, now ?? 0);
+  const isClosed = now !== null && deadline.isExpired;
 
   return (
     <div 
@@ -72,7 +71,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
+      <div ref={panelRef} className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
         
         {/* Modal Banner Header */}
         <div className={`relative p-6 sm:p-8 bg-gradient-to-br ${event.bannerGradient} text-white shrink-0 overflow-hidden`}>
@@ -95,17 +94,17 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               {event.categoryLabel}
             </span>
 
-            {event.isUrgent ? (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-rose-500 text-white border border-rose-300 animate-urgent-pulse">
-                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Hạn chót: Còn {event.daysRemaining} ngày đóng đơn</span>
+            <span
+              className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold text-white border ${
+                now !== null && deadline.isUrgent ? 'bg-rose-500 border-rose-300' : 'bg-white/20 backdrop-blur-md border-white/20'
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>
+                Hạn {deadline.dateLabel}
+                {now !== null && ` · ${deadline.countdown}`}
               </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/20 backdrop-blur-md text-white border border-white/20">
-                <Clock className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Hạn: {event.deadlineFormatted}</span>
-              </span>
-            )}
+            </span>
 
             <span className="text-xs text-blue-200 font-medium">
               {event.organizer}
@@ -118,57 +117,49 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           </h2>
 
           {/* Rating Summary */}
-          <div className="relative z-10 flex items-center gap-3 text-sm">
-            <div className="flex items-center gap-1 bg-black/30 px-2.5 py-1 rounded-lg border border-white/10 text-amber-300 font-bold">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true" />
-              <span>{event.rating} / 5.0</span>
+          {event.reviewCount > 0 && (
+            <div className="relative z-10 flex items-center gap-3 text-sm">
+              <div className="flex items-center gap-1 bg-black/30 px-2.5 py-1 rounded-lg border border-white/10 text-amber-300 font-bold">
+                <Star className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true" />
+                <span>{event.rating} / 5.0</span>
+              </div>
+              <span className="text-blue-100 text-xs">
+                Dựa trên {event.reviewCount} đánh giá từ sinh viên các mùa trước
+              </span>
             </div>
-            <span className="text-blue-100 text-xs">
-              Dựa trên {event.reviewCount} đánh giá từ sinh viên các mùa trước
-            </span>
-          </div>
+          )}
 
         </div>
 
         {/* Modal Navigation Tabs */}
-        <div className="flex border-b border-slate-200 bg-slate-50/80 px-6 shrink-0 gap-2 overflow-x-auto">
-          <button
-            onClick={() => setActiveTab('details')}
-            className={`min-h-[44px] py-3 px-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'details'
-                ? 'border-[#003B73] text-[#003B73]'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Thông tin chi tiết & Quyền lợi
-          </button>
-
-          <button
-            onClick={() => setActiveTab('timeline')}
-            className={`min-h-[44px] py-3 px-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'timeline'
-                ? 'border-[#003B73] text-[#003B73]'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Lộ trình & Mốc thời gian
-          </button>
-
-          <button
-            onClick={() => setActiveTab('reviews')}
-            className={`min-h-[44px] flex items-center gap-1.5 py-3 px-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === 'reviews'
-                ? 'border-[#003B73] text-[#003B73]'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            <MessageSquare className="w-4 h-4 text-blue-600" aria-hidden="true" />
-            <span>Review từ mùa trước ({event.reviews.length})</span>
-          </button>
+        <div role="tablist" aria-label="Thông tin sự kiện" className="flex border-b border-slate-200 bg-slate-50/80 px-6 shrink-0 gap-2 overflow-x-auto">
+          {TABS.map((tab) => (
+            <button
+              key={tab.id}
+              id={`event-tab-${tab.id}`}
+              role="tab"
+              aria-selected={activeTab === tab.id}
+              aria-controls="event-tabpanel"
+              onClick={() => setActiveTab(tab.id)}
+              className={`min-h-[44px] flex items-center gap-1.5 py-3 px-3 text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+                activeTab === tab.id
+                  ? 'border-[#003B73] text-[#003B73]'
+                  : 'border-transparent text-slate-500 hover:text-slate-800'
+              }`}
+            >
+              {tab.id === 'reviews' && <MessageSquare className="w-4 h-4 text-blue-600" aria-hidden="true" />}
+              <span>{tab.id === 'reviews' ? `${tab.label} (${event.reviews.length})` : tab.label}</span>
+            </button>
+          ))}
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-700">
+        <div
+          id="event-tabpanel"
+          role="tabpanel"
+          aria-labelledby={`event-tab-${activeTab}`}
+          className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-700"
+        >
           
           {/* TAB 1: DETAILS */}
           {activeTab === 'details' && (
@@ -204,7 +195,10 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
                   <Clock className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <span className="font-semibold text-slate-900 block">Hạn đóng đơn:</span>
-                    <span className="text-rose-600 font-bold">{event.deadlineFormatted}</span>
+                    <span className="text-rose-600 font-bold">
+                      {event.deadlineFormatted}
+                      {now !== null && ` · ${deadline.countdown}`}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -240,11 +234,28 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
               <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="w-4 h-4 text-[#003B73]" aria-hidden="true" />
-                  <span>Kênh hỗ trợ BTC: <strong>{event.contactEmail}</strong></span>
+                  <span>
+                    Kênh hỗ trợ BTC:{' '}
+                    {event.contactEmail ? (
+                      <a href={`mailto:${event.contactEmail}`} className="font-bold text-blue-700 underline break-all">
+                        {event.contactEmail}
+                      </a>
+                    ) : (
+                      'chưa cập nhật'
+                    )}
+                  </span>
                 </div>
-                <div className="text-slate-500">
-                  Fanpage: <span className="text-blue-700 underline">{event.contactFanpage}</span>
-                </div>
+                {event.contactFanpage && <div className="text-slate-500">
+                  Fanpage:{' '}
+                  <a
+                    href={`https://${event.contactFanpage.replace(/^https?:\/\//, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-700 underline break-all"
+                  >
+                    {event.contactFanpage}
+                  </a>
+                </div>}
               </div>
 
             </div>
@@ -277,7 +288,11 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           )}
 
           {/* TAB 3: REVIEWS FROM PAST SEASONS */}
-          {activeTab === 'reviews' && (
+          {activeTab === 'reviews' && event.reviews.length === 0 && (
+            <p className="text-sm text-slate-500">Chưa có review nào từ mùa trước cho hoạt động này.</p>
+          )}
+
+          {activeTab === 'reviews' && event.reviews.length > 0 && (
             <div className="space-y-5">
               
               {/* Rating Overview */}
@@ -373,16 +388,22 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
           </div>
 
           {/* Primary Registration CTA */}
-          <a
-            href={event.registrationUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Đăng ký ngay tại form chính thức của Ban tổ chức"
-            className="min-h-[44px] flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#003B73] via-[#0B4F9F] to-[#1E88E5] hover:opacity-95 shadow-md shadow-blue-900/20 active:scale-[0.98] transition-all cursor-pointer"
-          >
-            <span>Đăng ký ngay (Form BTC)</span>
-            <ExternalLink className="w-4 h-4 text-blue-200" aria-hidden="true" />
-          </a>
+          {isClosed || !event.registrationUrl ? (
+            <span className="min-h-[44px] flex items-center px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-500 bg-slate-100 border border-slate-200">
+              {isClosed ? 'Đã hết hạn đăng ký' : 'BTC chưa cung cấp link đăng ký'}
+            </span>
+          ) : (
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Đăng ký ngay tại form chính thức của Ban tổ chức"
+              className="min-h-[44px] flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm text-white bg-gradient-to-r from-[#003B73] via-[#0B4F9F] to-[#1E88E5] hover:opacity-95 shadow-md shadow-blue-900/20 active:scale-[0.98] transition-all cursor-pointer"
+            >
+              <span>Đăng ký ngay (Form BTC)</span>
+              <ExternalLink className="w-4 h-4 text-blue-200" aria-hidden="true" />
+            </a>
+          )}
 
         </div>
 

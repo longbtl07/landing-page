@@ -108,6 +108,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu điều hướng'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-nav"
               className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 cursor-pointer"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" aria-hidden="true" /> : <Menu className="w-6 h-6" aria-hidden="true" />}
@@ -119,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2">
+        <div id="mobile-nav" className="md:hidden border-t border-slate-200 bg-white/98 backdrop-blur-xl px-4 pt-3 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2">
           <div className="flex flex-col space-y-1">
             <a
               href="#radar-feed"

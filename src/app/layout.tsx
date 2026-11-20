@@ -3,7 +3,7 @@ import { Be_Vietnam_Pro } from 'next/font/google';
 import './globals.css';
 
 const beVietnamPro = Be_Vietnam_Pro({
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700', '800'],
   subsets: ['latin', 'vietnamese'],
   display: 'swap',
   variable: '--font-be-vietnam-pro',
@@ -24,6 +24,22 @@ export const metadata: Metadata = {
     'Ghép đội dự thi'
   ],
   authors: [{ name: 'Nhóm CNTT&TT 73 — ULIS' }],
+  metadataBase: new URL('https://cntttt.vercel.app'),
+  alternates: { canonical: '/' },
+  // Link previews on Facebook / Zalo / Messenger
+  openGraph: {
+    type: 'website',
+    locale: 'vi_VN',
+    url: '/',
+    siteName: 'ULIS Radar',
+    title: 'ULIS Radar — Sự kiện & cuộc thi cho sinh viên Ngoại ngữ',
+    description: 'Tổng hợp cuộc thi, workshop, hội thảo tại ULIS kèm hạn chót, điểm rèn luyện và certificate. Không còn bỏ lỡ hạn nộp đơn.',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'ULIS Radar — Sự kiện & cuộc thi cho sinh viên Ngoại ngữ',
+    description: 'Tổng hợp cuộc thi, workshop, hội thảo tại ULIS kèm hạn chót, điểm rèn luyện và certificate.',
+  },
 };
 
 export default function RootLayout({

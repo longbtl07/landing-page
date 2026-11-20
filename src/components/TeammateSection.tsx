@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { 
   Users, 
   UserPlus, 
@@ -12,6 +12,17 @@ import {
   Share2
 } from 'lucide-react';
 import { TeammatePost } from '@/types';
+import { useModal } from '@/utils/useModal';
+
+/** Turns stored contact text into a tappable link, or null when it isn't a usable one. */
+function contactHref(kind: 'email' | 'zalo' | 'fb', value: string): string | null {
+  if (kind === 'email') return `mailto:${value}`;
+  if (kind === 'zalo') {
+    const digits = value.replace(/\D/g, '');
+    return /^0\d{9}$/.test(digits) ? `https://zalo.me/${digits}` : null;
+  }
+  return `https://${value.replace(/^https?:\/\//, '')}`;
+}
 
 interface TeammateSectionProps {
   teammates: TeammatePost[];
@@ -27,20 +38,8 @@ export const TeammateSection: React.FC<TeammateSectionProps> = ({
   const [selectedPost, setSelectedPost] = useState<TeammatePost | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  // Handle ESC for contact popup
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedPost(null);
-    };
-    if (selectedPost) {
-      window.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'unset';
-    };
-  }, [selectedPost]);
+  const closePopup = useCallback(() => setSelectedPost(null), []);
+  const panelRef = useModal<HTMLDivElement>(!!selectedPost, closePopup);
 
   const handleCopy = (text: string, key: string, label: string) => {
     navigator.clipboard.writeText(text)
@@ -190,7 +189,7 @@ export const TeammateSection: React.FC<TeammateSectionProps> = ({
             aria-hidden="true"
           />
 
-          <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+          <div ref={panelRef} className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 animate-in zoom-in-95 duration-200">
             
             {/* Header */}
             <div className="p-6 bg-gradient-to-r from-[#003B73] to-[#0B4F9F] text-white flex items-center justify-between">
@@ -236,7 +235,9 @@ export const TeammateSection: React.FC<TeammateSectionProps> = ({
                 <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 min-h-[48px]">
                   <div className="flex items-center gap-2.5">
                     <Mail className="w-4 h-4 text-blue-600 shrink-0" aria-hidden="true" />
-                    <span className="font-medium text-slate-800 select-all">{selectedPost.contactEmail}</span>
+                    <a href={contactHref('email', selectedPost.contactEmail)!} className="font-medium text-blue-700 underline break-all">
+                      {selectedPost.contactEmail}
+                    </a>
                   </div>
                   <button
                     onClick={() => handleCopy(selectedPost.contactEmail, 'email', 'Email')}
@@ -253,7 +254,13 @@ export const TeammateSection: React.FC<TeammateSectionProps> = ({
                   <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 min-h-[48px]">
                     <div className="flex items-center gap-2.5">
                       <MessageCircle className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                      <span className="font-medium text-slate-800">Zalo/SĐT: {selectedPost.contactZalo}</span>
+                      {contactHref('zalo', selectedPost.contactZalo) ? (
+                        <a href={contactHref('zalo', selectedPost.contactZalo)!} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline">
+                          Zalo: {selectedPost.contactZalo}
+                        </a>
+                      ) : (
+                        <span className="font-medium text-slate-800">Zalo/SĐT: {selectedPost.contactZalo}</span>
+                      )}
                     </div>
                     <button
                       onClick={() => handleCopy(selectedPost.contactZalo!, 'zalo', 'Zalo/SĐT')}
@@ -271,7 +278,9 @@ export const TeammateSection: React.FC<TeammateSectionProps> = ({
                   <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 min-h-[48px]">
                     <div className="flex items-center gap-2.5">
                       <Share2 className="w-4 h-4 text-indigo-600 shrink-0" aria-hidden="true" />
-                      <span className="font-medium text-slate-800 truncate max-w-[200px]">{selectedPost.contactFacebook}</span>
+                      <a href={contactHref('fb', selectedPost.contactFacebook)!} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-700 underline truncate max-w-[200px]">
+                        {selectedPost.contactFacebook}
+                      </a>
                     </div>
                     <button
                       onClick={() => handleCopy(selectedPost.contactFacebook!, 'fb', 'Facebook')}
