@@ -3,11 +3,15 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { HeroSearch } from '@/components/HeroSearch';
+import { BenefitsSection } from '@/components/BenefitsSection';
 import { FilterBar } from '@/components/FilterBar';
-import { EventCard } from '@/components/EventCard';
+import { EventCard, DeadlineBadge } from '@/components/EventCard';
+import { MediaShowcaseSection } from '@/components/MediaShowcaseSection';
 import { EventDetailModal } from '@/components/EventDetailModal';
 import { TeammateSection } from '@/components/TeammateSection';
 import { PostTeammateModal } from '@/components/PostTeammateModal';
+import { TestimonialsSection } from '@/components/TestimonialsSection';
+import { RegistrationSection } from '@/components/RegistrationSection';
 import { SavedEventsDrawer } from '@/components/SavedEventsDrawer';
 import { SubmitEventModal } from '@/components/SubmitEventModal';
 import { ToastContainer } from '@/components/Toast';
@@ -16,7 +20,7 @@ import { Footer } from '@/components/Footer';
 import { INITIAL_EVENTS, INITIAL_TEAMMATES } from '@/data/mockData';
 import { EventItem, EventBenefit, TeammatePost, ToastMessage } from '@/types';
 import { normalizeVietnamese, shorten, getDeadlineDate, getDeadlineInfo, buildIcs } from '@/utils';
-import { Radio, SearchX, BookmarkCheck } from 'lucide-react';
+import { Radio, SearchX, BookmarkCheck, Calendar, MapPin, Bookmark, ArrowUpRight } from 'lucide-react';
 
 const byDeadline = (a: EventItem, b: EventItem) => getDeadlineDate(a).getTime() - getDeadlineDate(b).getTime();
 
@@ -82,6 +86,7 @@ export default function Home() {
   const [category, setCategory] = useState('all');
   const [benefit, setBenefit] = useState('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'latest' | 'popular'>('deadline');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   // Modals & Drawer States
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
@@ -313,6 +318,9 @@ export default function Home() {
           resultCount={filteredEvents.length}
         />
 
+        {/* Core Benefits Section (Tiêu chí 3) */}
+        <BenefitsSection />
+
         {/* Main Event Radar Feed Section */}
         <section id="radar-feed" className="py-8 sm:py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-20">
           
@@ -352,25 +360,91 @@ export default function Home() {
             onBenefitChange={setBenefit}
             sortBy={sortBy}
             onSortByChange={setSortBy}
+            viewMode={viewMode}
+            onViewModeChange={setViewMode}
             totalFiltered={filteredEvents.length}
             onResetFilters={handleResetFilters}
             hasActiveFilters={hasActiveFilters}
           />
 
-          {/* Event Cards Grid */}
+          {/* Event Cards Grid or Timeline List */}
           {filteredEvents.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {filteredEvents.map((event) => (
-                <EventCard
-                  key={event.id}
-                  event={event}
-                  now={now}
-                  isSaved={savedEventIds.includes(event.id)}
-                  onToggleSave={handleToggleSave}
-                  onSelectEvent={setSelectedEvent}
-                />
-              ))}
-            </div>
+            viewMode === 'grid' ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                {filteredEvents.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    now={now}
+                    isSaved={savedEventIds.includes(event.id)}
+                    onToggleSave={handleToggleSave}
+                    onSelectEvent={setSelectedEvent}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-3.5">
+                {filteredEvents.map((event) => {
+                  const isSaved = savedEventIds.includes(event.id);
+                  return (
+                    <div
+                      key={event.id}
+                      className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 p-4 sm:p-5 shadow-xs hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-2 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-[#003B73] border border-blue-200">
+                            {event.categoryLabel}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-500">
+                            {event.organizer}
+                          </span>
+                          <DeadlineBadge event={event} now={now} />
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                          {event.title}
+                        </h3>
+
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
+                            {event.eventDate}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                            {event.location}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleSave(event)}
+                          className={`min-h-[40px] flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                            isSaved
+                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-blue-50 hover:text-[#003B73]'
+                          }`}
+                        >
+                          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-emerald-600' : ''}`} aria-hidden="true" />
+                          <span>{isSaved ? 'Đã lưu ✓' : 'Lưu lịch'}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedEvent(event)}
+                          className="min-h-[40px] flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#003B73] hover:bg-[#0B4F9F] transition-colors cursor-pointer"
+                        >
+                          <span>Chi tiết</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )
           ) : (
             /* Empty Search/Filter State */
             <div className="py-16 px-4 text-center bg-white rounded-3xl border border-slate-200 shadow-xs max-w-lg mx-auto">
@@ -394,11 +468,23 @@ export default function Home() {
 
         </section>
 
+        {/* Media Showcase: Video Demo & Activity Gallery (Tiêu chí 4) */}
+        <MediaShowcaseSection />
+
         {/* Teammate Finder Section ("Ghép đội dự thi") */}
         <TeammateSection
           teammates={teammates}
           onOpenPostModal={() => setIsPostTeammateModalOpen(true)}
           onCopyText={handleCopyText}
+        />
+
+        {/* Student & Club Testimonials Section (Tiêu chí 8) */}
+        <TestimonialsSection />
+
+        {/* Direct Activity Registration Form Section (Tiêu chí 7) */}
+        <RegistrationSection
+          availableEvents={events}
+          onRegisterSuccess={(title, message) => addToast('success', title, message)}
         />
 
       </main>
