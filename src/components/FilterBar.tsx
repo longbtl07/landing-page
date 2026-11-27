@@ -20,6 +20,8 @@ interface FilterBarProps {
   viewMode: 'grid' | 'list';
   onViewModeChange: (mode: 'grid' | 'list') => void;
   totalFiltered: number;
+  hideExpired: boolean;
+  onHideExpiredChange: (hide: boolean) => void;
   onResetFilters: () => void;
   hasActiveFilters: boolean;
 }
@@ -34,6 +36,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   viewMode,
   onViewModeChange,
   totalFiltered,
+  hideExpired,
+  onHideExpiredChange,
   onResetFilters,
   hasActiveFilters,
 }) => {
@@ -163,8 +167,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
       {/* Bottom Summary Bar */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-3">
-        <div className="text-xs sm:text-sm text-slate-600 font-medium">
-          <span className="font-bold text-[#003B73]">{totalFiltered}</span> hoạt động còn mở đăng ký
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="text-xs sm:text-sm text-slate-600 font-medium">
+            <span className="font-bold text-[#003B73]">{totalFiltered}</span> hoạt động phù hợp trên Radar
+          </div>
+          <label className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={hideExpired}
+              onChange={(e) => onHideExpiredChange(e.target.checked)}
+              className="rounded border-slate-300 text-[#003B73] focus:ring-blue-500 w-4 h-4 cursor-pointer"
+            />
+            <span>Ẩn sự kiện đã đóng đơn</span>
+          </label>
         </div>
 
         {hasActiveFilters && (

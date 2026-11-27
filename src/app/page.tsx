@@ -87,6 +87,7 @@ export default function Home() {
   const [benefit, setBenefit] = useState('all');
   const [sortBy, setSortBy] = useState<'deadline' | 'latest' | 'popular'>('deadline');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [hideExpired, setHideExpired] = useState(false);
 
   // Modals & Drawer States
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
@@ -221,15 +222,19 @@ export default function Home() {
     setCategory('all');
     setBenefit('all');
     setSortBy('deadline');
+    setHideExpired(false);
     addToast('info', 'Đã đặt lại bộ lọc', 'Hiển thị lại toàn bộ sự kiện khả dụng.');
   };
 
-  const hasActiveFilters = searchQuery !== '' || quickFilter !== 'all' || category !== 'all' || benefit !== 'all';
+  const hasActiveFilters = searchQuery !== '' || quickFilter !== 'all' || category !== 'all' || benefit !== 'all' || hideExpired;
 
   // Filtered & Sorted Events
   const filteredEvents = useMemo(() => {
-    // Closed deadlines drop out of the feed (only once the client clock is known)
-    let result = now === null ? [...events] : events.filter((e) => !getDeadlineInfo(e, now).isExpired);
+    // Optionally hide closed deadlines when user checks "Ẩn sự kiện đã đóng đơn"
+    let result =
+      hideExpired && now !== null
+        ? events.filter((e) => !getDeadlineInfo(e, now).isExpired)
+        : [...events];
 
     // 1. Vietnamese Diacritics-Insensitive Search
     if (searchQuery.trim()) {
@@ -274,9 +279,15 @@ export default function Home() {
       result = result.filter((item) => item.benefits.includes(benefit as EventBenefit));
     }
 
-    // 5. Sorting
+    // 5. Sorting (open/upcoming events ahead of already-closed highlights)
     result.sort((a, b) => {
       if (sortBy === 'deadline') {
+        if (now !== null) {
+          const aExp = getDeadlineInfo(a, now).isExpired;
+          const bExp = getDeadlineInfo(b, now).isExpired;
+          if (aExp !== bExp) return aExp ? 1 : -1;
+          if (aExp && bExp) return b.deadline.localeCompare(a.deadline);
+        }
         return byDeadline(a, b);
       }
       if (sortBy === 'popular') {
@@ -291,7 +302,7 @@ export default function Home() {
     });
 
     return result;
-  }, [events, now, searchQuery, quickFilter, category, benefit, sortBy]);
+  }, [events, now, hideExpired, searchQuery, quickFilter, category, benefit, sortBy]);
 
   // Saved Event Objects, soonest deadline first
   const savedEventsList = useMemo(() => {
@@ -363,6 +374,8 @@ export default function Home() {
             viewMode={viewMode}
             onViewModeChange={setViewMode}
             totalFiltered={filteredEvents.length}
+            hideExpired={hideExpired}
+            onHideExpiredChange={setHideExpired}
             onResetFilters={handleResetFilters}
             hasActiveFilters={hasActiveFilters}
           />
