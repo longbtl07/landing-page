@@ -8,116 +8,158 @@ import {
   Users,
   Sparkles,
   CheckCircle2,
+  ArrowUpRight,
 } from 'lucide-react';
 
 export const BenefitsSection: React.FC = () => {
-  const benefits = [
-    {
-      icon: Radar,
-      badge: 'Không lo trôi bài',
-      title: 'Gom trọn 30+ nguồn CLB & Khoa',
-      desc: 'Tổng hợp tức thì các cuộc thi, hội thảo từ Đoàn - Hội, Liên chi Đoàn các Khoa và các CLB ULIS về một bảng tin duy nhất — chấm dứt cảnh lỡ tin do thuật toán Facebook.',
-      accent: 'from-blue-600 to-sky-500',
-      lightBg: 'bg-blue-50 text-[#003B73] border-blue-200',
-      highlights: ['Cập nhật liên tục hàng ngày', 'Tìm kiếm tiếng Việt không dấu'],
-    },
-    {
-      icon: Award,
-      badge: 'Tối ưu CV & ĐRL',
-      title: 'Lọc đúng Điểm rèn luyện & Chứng nhận',
-      desc: 'Phân loại minh bạch hoạt động nào có cộng Điểm rèn luyện (+ĐRL), cấp Certificate song ngữ hay có giải thưởng/cơ hội thực tập phù hợp từng khóa K57 – K60.',
-      accent: 'from-emerald-600 to-teal-500',
-      lightBg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-      highlights: ['Filter nhanh theo mục tiêu', 'Hiển thị rõ quyền lợi từng thẻ'],
-    },
-    {
-      icon: BellRing,
-      badge: 'Không cần đăng nhập',
-      title: 'Lưu lịch & Xuất file .ics trong 1 chạm',
-      desc: 'Trải nghiệm mượt mà không cần tạo tài khoản rườm rà. Dữ liệu lưu trực tiếp trên trình duyệt và xuất file .ics nhập thẳng vào Google Calendar hoặc Apple Calendar.',
-      accent: 'from-amber-500 to-orange-500',
-      lightBg: 'bg-amber-50 text-amber-800 border-amber-200',
-      highlights: ['Nhắc trước hạn chót 24h', 'Tương thích mọi thiết bị'],
-    },
-    {
-      icon: Users,
-      badge: 'Kết nối liên khoa',
-      title: 'Sàn Ghép đội dự thi nhanh chóng',
-      desc: 'Thiếu thành viên giỏi Design slide, Research hay Speaking? Đăng tin tìm đồng đội theo đúng cuộc thi để kết nối nhanh sinh viên K57 – K60 trên toàn trường.',
-      accent: 'from-indigo-600 to-blue-600',
-      lightBg: 'bg-indigo-50 text-indigo-800 border-indigo-200',
-      highlights: ['Kết nối đa Khoa ngoại ngữ', 'Liên hệ trực tiếp qua Zalo/FB'],
-    },
-  ];
-
   return (
     <section
       id="benefits-section"
       aria-labelledby="benefits-heading"
-      className="py-14 bg-white border-y border-slate-200/80 scroll-mt-20"
+      className="py-14 bg-white border-b border-slate-200/80 scroll-mt-20"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003B73] text-xs font-bold mb-3">
-            <Sparkles className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
-            <span>Giá trị cốt lõi dành cho sinh viên Ngoại ngữ</span>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-9">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003B73] text-xs font-bold mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
+              <span>Giá trị cốt lõi • Hệ sinh thái ULIS Radar</span>
+            </div>
+            <h2
+              id="benefits-heading"
+              className="text-2xl sm:text-3xl font-extrabold text-[#002244] tracking-tight"
+            >
+              Tại sao sinh viên Ngoại ngữ chọn ULIS Radar?
+            </h2>
           </div>
-          <h2
-            id="benefits-heading"
-            className="text-2xl sm:text-3xl font-extrabold text-[#003B73] tracking-tight mb-3"
-          >
-            Tại sao 84,3% sinh viên cần ULIS Radar?
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-            Khắc phục hoàn toàn tình trạng bỏ lỡ hạn đăng ký vì thông tin phân tán — giúp bạn chủ động tích lũy thành tích suốt 4 năm đại học.
+          <p className="text-sm text-slate-600 max-w-md leading-relaxed">
+            Thiết kế chuyên biệt để chấm dứt tình trạng trôi bài fanpage, giúp sinh viên K57 – K60 chủ động tích lũy thành tích suốt 4 năm đại học.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {benefits.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={item.title}
-                className="group relative bg-slate-50/70 hover:bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-300 shadow-xs hover:shadow-lg hover:shadow-blue-900/5 transition-all duration-300 flex flex-col"
+        {/* Asymmetric Bento Grid (distinct from uniform 4-card rows) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {/* Featured Dark Bento Tile (5 cols, 2 rows) */}
+          <div className="lg:col-span-5 lg:row-span-2 relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#001833] via-[#002855] to-[#003B73] text-white p-7 sm:p-8 flex flex-col justify-between shadow-xl shadow-blue-950/15">
+            <div
+              aria-hidden="true"
+              className="absolute -right-12 -bottom-12 w-56 h-56 rounded-full border border-cyan-400/20 pointer-events-none"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute -right-4 -bottom-4 w-36 h-36 rounded-full border border-amber-300/25 pointer-events-none"
+            />
+
+            <div className="relative space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-[#1E88E5] to-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/25">
+                  <Radar className="w-6 h-6 text-white" aria-hidden="true" />
+                </div>
+                <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-400 text-[#001833]">
+                  01 • Không lo trôi bài
+                </span>
+              </div>
+
+              <h3 className="text-xl sm:text-2xl font-extrabold leading-snug pt-2">
+                Gom trọn 30+ nguồn CLB, Khoa & Đoàn - Hội về 1 trạm duy nhất
+              </h3>
+
+              <p className="text-sm text-blue-100/90 leading-relaxed">
+                Không còn cảnh lướt Facebook suốt cả buổi tối mới thấy bài tuyển thành viên hay cuộc thi đã đóng đơn từ hôm qua. Toàn bộ tin tức được chuẩn hóa lịch trình và sắp xếp theo độ khẩn cấp.
+              </p>
+
+              <ul className="space-y-2.5 pt-2 text-xs sm:text-sm text-cyan-100">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Cập nhật liên tục từ các Khoa chuyên ngữ & CLB</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Tìm kiếm tiếng Việt không dấu siêu tốc</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Đếm ngược thời gian thực tới từng giờ chót</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="relative mt-8 pt-5 border-t border-white/15 flex items-center justify-between">
+              <div>
+                <div className="text-2xl font-extrabold text-amber-300">84,3%</div>
+                <div className="text-xs text-blue-200">Sinh viên ULIS từng lỡ tin trước khi có Radar</div>
+              </div>
+              <a
+                href="#radar-feed"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 text-xs font-bold text-white transition-colors"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div
-                    className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${item.accent} text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform`}
-                  >
-                    <Icon className="w-6 h-6" aria-hidden="true" />
+                <span>Khám phá ngay</span>
+                <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Top Wide Tile (7 cols) */}
+          <div className="lg:col-span-7 rounded-3xl bg-slate-50 hover:bg-blue-50/40 border border-slate-200 hover:border-blue-300 p-6 sm:p-7 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+            <div className="space-y-2.5 flex-1">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  02 • Tối ưu CV & ĐRL
+                </span>
+                <span className="text-xs font-semibold text-slate-500">Minh bạch quyền lợi</span>
+              </div>
+              <h3 className="text-lg font-extrabold text-[#002244]">
+                Lọc chính xác Điểm rèn luyện & Giấy chứng nhận (Certificate)
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Phân định rõ hoạt động nào được cộng ĐRL (+5 đến +15 điểm), hoạt động nào cấp Certificate song ngữ hay có học bổng/thực tập để bạn đầu tư thời gian đúng mục tiêu.
+              </p>
+            </div>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <Award className="w-8 h-8" aria-hidden="true" />
+            </div>
+          </div>
+
+          {/* Right Bottom Split Tiles */}
+          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="rounded-3xl bg-amber-50/60 hover:bg-amber-50 border border-amber-200/80 p-6 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-11 h-11 rounded-2xl bg-amber-500 text-white flex items-center justify-center shadow-sm">
+                    <BellRing className="w-5 h-5" aria-hidden="true" />
                   </div>
-                  <span
-                    className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${item.lightBg}`}
-                  >
-                    {item.badge}
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-amber-900 border border-amber-200">
+                    03 • Không cần đăng nhập
                   </span>
                 </div>
-
-                <h3 className="text-base font-extrabold text-slate-900 mb-2 leading-snug">
-                  {item.title}
+                <h3 className="text-base font-extrabold text-slate-900 mb-1.5">
+                  Lưu lịch & Xuất file .ics
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 flex-1">
-                  {item.desc}
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Ghi nhớ tự động trên trình duyệt không cần tài khoản và xuất file lịch <code className="text-xs font-bold">.ics</code> nhập thẳng vào Google/Apple Calendar.
                 </p>
-
-                <ul className="space-y-1.5 pt-3 border-t border-slate-200/80">
-                  {item.highlights.map((hl) => (
-                    <li
-                      key={hl}
-                      className="flex items-center gap-1.5 text-xs font-medium text-slate-700"
-                    >
-                      <CheckCircle2
-                        className="w-3.5 h-3.5 text-emerald-600 shrink-0"
-                        aria-hidden="true"
-                      />
-                      <span>{hl}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
-            );
-          })}
+            </div>
+
+            <div className="rounded-3xl bg-blue-50/60 hover:bg-blue-50 border border-blue-200/80 p-6 transition-all flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="w-11 h-11 rounded-2xl bg-[#003B73] text-white flex items-center justify-center shadow-sm">
+                    <Users className="w-5 h-5" aria-hidden="true" />
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#003B73] border border-blue-200">
+                    04 • Kết nối liên khoa
+                  </span>
+                </div>
+                <h3 className="text-base font-extrabold text-slate-900 mb-1.5">
+                  Ghép đội dự thi nhanh
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Tìm ngay bạn đồng hành mạnh Design, Research hoặc Speaking giữa các Khoa K57 – K60 để tự tin chinh phục mọi cuộc thi.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

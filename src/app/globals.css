@@ -26,6 +26,12 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 
+.glass-nav-dark {
+  background: rgba(0, 24, 51, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
 /* Subtle pulse for radar scanner */
 @keyframes radar-sweep {
   0% {

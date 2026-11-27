@@ -66,77 +66,79 @@ export const MediaShowcaseSection: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#003B73] text-xs font-bold mb-3">
             <Images className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
-            <span>Trải nghiệm trực quan</span>
+            <span>Sân khấu trải nghiệm ULIS</span>
           </div>
           <h2
             id="media-heading"
-            className="text-2xl sm:text-3xl font-extrabold text-[#003B73] tracking-tight mb-3"
+            className="text-2xl sm:text-3xl font-extrabold text-[#002244] tracking-tight mb-3"
           >
-            Video giới thiệu & Hình ảnh hoạt động ULIS
+            Video giới thiệu & Hình ảnh hoạt động sinh viên
           </h2>
           <p className="text-sm sm:text-base text-slate-600">
-            Khám phá nhịp sống ngoại khóa sôi động tại Trường Đại học Ngoại ngữ và cách ULIS Radar giúp bạn không bỏ lỡ bất kỳ cơ hội nào.
+            Khám phá nhịp sống ngoại khóa sôi động tại Trường Đại học Ngoại ngữ và cách ULIS Radar giúp bạn bắt trọn mọi cơ hội.
           </p>
         </div>
 
-        {/* Main Video + Highlights Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-12">
-          {/* Video Player (7 cols) */}
-          <div className="lg:col-span-7">
-            <div className="relative rounded-3xl overflow-hidden border border-slate-200 shadow-xl shadow-blue-900/10 bg-slate-900">
-              <video
-                controls
-                playsInline
-                preload="metadata"
-                poster="/images/debate-ulis.jpg"
-                aria-label="Video giới thiệu hệ thống ULIS Events & Competitions Radar"
-                className="w-full aspect-video object-cover"
-              >
-                <source src="/videos/ulis-radar-demo.mp4" type="video/mp4" />
-                Trình duyệt của bạn không hỗ trợ phát video HTML5.
-              </video>
-            </div>
-          </div>
-
-          {/* Video Summary Copy (5 cols) */}
-          <div className="lg:col-span-5 space-y-5">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 text-[#003B73] text-xs font-bold border border-blue-100">
-              <PlayCircle className="w-4 h-4 text-[#1E88E5]" aria-hidden="true" />
-              <span>Video Demo Tổng Quan • 12 giây</span>
+        {/* Midnight Stage Theatre Block for Video */}
+        <div className="rounded-3xl bg-gradient-to-br from-[#00142B] via-[#002244] to-[#003B73] text-white p-5 sm:p-8 lg:p-10 shadow-2xl shadow-blue-950/15 border border-cyan-400/20 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Video Player (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="relative rounded-2xl overflow-hidden border border-cyan-300/25 shadow-2xl bg-slate-950">
+                <video
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster="/images/debate-ulis.jpg"
+                  aria-label="Video giới thiệu hệ thống ULIS Events & Competitions Radar"
+                  className="w-full aspect-video object-cover"
+                >
+                  <source src="/videos/ulis-radar-demo.mp4" type="video/mp4" />
+                  Trình duyệt của bạn không hỗ trợ phát video HTML5.
+                </video>
+              </div>
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 leading-snug">
-              Từ thông tin rời rạc đến lộ trình ngoại khóa bài bản
-            </h3>
+            {/* Video Summary Copy (5 cols) */}
+            <div className="lg:col-span-5 space-y-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-400/15 text-amber-300 text-xs font-bold border border-amber-300/30">
+                <PlayCircle className="w-4 h-4 text-amber-300" aria-hidden="true" />
+                <span>Video Demo Tổng Quan • 12 giây</span>
+              </div>
 
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Video mô phỏng nhanh quy trình hoạt động của ULIS Radar: gom tin sự kiện từ 30+ CLB, lọc theo mục tiêu Điểm rèn luyện hoặc Certificate, ghép đội dự thi và xuất lịch trực tiếp về điện thoại.
-            </p>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-white leading-snug">
+                Từ thông tin rời rạc đến lộ trình ngoại khóa bài bản
+              </h3>
 
-            <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700">
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>Giao diện thiết kế riêng cho sinh viên K57 – K60</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>Tương thích mượt mà trên Laptop và Điện thoại</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" aria-hidden="true" />
-                <span>Thông tin được kiểm duyệt bởi Ban biên tập Nhóm 73</span>
-              </li>
-            </ul>
+              <p className="text-sm text-blue-100/90 leading-relaxed">
+                Video mô phỏng nhanh quy trình hoạt động của ULIS Radar: gom tin sự kiện từ 30+ CLB, lọc theo mục tiêu Điểm rèn luyện hoặc Certificate, ghép đội dự thi và xuất lịch trực tiếp về điện thoại.
+              </p>
+
+              <ul className="space-y-2.5 text-xs sm:text-sm text-cyan-100">
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Thiết kế riêng cho sinh viên K57 – K60</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Xem dạng Lưới Poster hoặc Bảng lịch Timeline</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300 shrink-0" aria-hidden="true" />
+                  <span>Thông tin được kiểm duyệt bởi Ban biên tập Nhóm 73</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
         {/* 4-Image Activity Gallery */}
         <div>
           <div className="flex items-center justify-between mb-5">
-            <h3 className="text-base sm:text-lg font-extrabold text-[#003B73] flex items-center gap-2">
+            <h3 className="text-base sm:text-lg font-extrabold text-[#002244] flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-[#1E88E5]" aria-hidden="true" />
               <span>Không gian hoạt động sinh viên tiêu biểu</span>
             </h3>
@@ -151,7 +153,7 @@ export const MediaShowcaseSection: React.FC = () => {
                 key={item.id}
                 type="button"
                 onClick={() => setLightboxItem(item)}
-                className="group text-left bg-slate-50 hover:bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-300 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col"
+                className="group text-left bg-slate-50 hover:bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-[#003B73] shadow-xs hover:shadow-lg transition-all cursor-pointer flex flex-col"
               >
                 <div className="relative aspect-video w-full overflow-hidden bg-slate-200">
                   <Image
@@ -161,8 +163,8 @@ export const MediaShowcaseSection: React.FC = () => {
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-end p-2.5">
-                    <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white/90 text-[#003B73] text-[11px] font-bold">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#001833]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-end p-2.5">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-400 text-[#001833] text-[11px] font-bold">
                       <Maximize2 className="w-3 h-3" aria-hidden="true" />
                       Phóng to
                     </span>

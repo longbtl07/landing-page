@@ -386,58 +386,68 @@ export default function Home() {
               <div className="space-y-3.5">
                 {filteredEvents.map((event) => {
                   const isSaved = savedEventIds.includes(event.id);
+                  const [, monthPart = '12', dayPart = '01'] = event.deadline.split('-');
                   return (
                     <div
                       key={event.id}
-                      className="bg-white rounded-2xl border border-slate-200 hover:border-blue-300 p-4 sm:p-5 shadow-xs hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                      className="bg-white rounded-2xl border border-slate-200 hover:border-[#003B73]/50 shadow-xs hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4 overflow-hidden"
                     >
-                      <div className="space-y-2 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-[#003B73] border border-blue-200">
-                            {event.categoryLabel}
+                      <div className="flex items-stretch flex-1 min-w-0">
+                        <div className="hidden sm:flex flex-col items-center justify-center px-4 py-3 bg-[#002244] text-white shrink-0 min-w-[74px]">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                            TH{monthPart}
                           </span>
-                          <span className="text-xs font-semibold text-slate-500">
-                            {event.organizer}
-                          </span>
-                          <DeadlineBadge event={event} now={now} />
+                          <span className="text-2xl font-black leading-tight">{dayPart}</span>
                         </div>
 
-                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
-                          {event.title}
-                        </h3>
+                        <div className="p-4 sm:p-5 space-y-2 flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#002244] text-cyan-200">
+                              {event.categoryLabel}
+                            </span>
+                            <span className="text-xs font-semibold text-slate-600">
+                              {event.organizer}
+                            </span>
+                            <DeadlineBadge event={event} now={now} />
+                          </div>
 
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
-                            {event.eventDate}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <MapPin className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
-                            {event.location}
-                          </span>
+                          <h3 className="text-base sm:text-lg font-extrabold text-[#002244]">
+                            {event.title}
+                          </h3>
+
+                          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5 text-[#1E88E5]" aria-hidden="true" />
+                              {event.eventDate}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5 text-emerald-600" aria-hidden="true" />
+                              {event.location}
+                            </span>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2.5 shrink-0">
+                      <div className="flex items-center gap-2.5 shrink-0 px-4 pb-4 lg:py-4 lg:pr-5">
                         <button
                           type="button"
                           onClick={() => handleToggleSave(event)}
                           className={`min-h-[40px] flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                             isSaved
-                              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                              ? 'bg-amber-400 text-[#001833] border-amber-400 hover:bg-amber-300'
                               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-blue-50 hover:text-[#003B73]'
                           }`}
                         >
-                          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-emerald-600' : ''}`} aria-hidden="true" />
+                          <Bookmark className={`w-3.5 h-3.5 ${isSaved ? 'fill-[#001833]' : ''}`} aria-hidden="true" />
                           <span>{isSaved ? 'Đã lưu ✓' : 'Lưu lịch'}</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => setSelectedEvent(event)}
-                          className="min-h-[40px] flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#003B73] hover:bg-[#0B4F9F] transition-colors cursor-pointer"
+                          className="min-h-[40px] flex items-center gap-1 px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#002244] hover:bg-[#0B4F9F] transition-colors cursor-pointer"
                         >
                           <span>Chi tiết</span>
-                          <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                          <ArrowUpRight className="w-3.5 h-3.5 text-cyan-300" aria-hidden="true" />
                         </button>
                       </div>
                     </div>
