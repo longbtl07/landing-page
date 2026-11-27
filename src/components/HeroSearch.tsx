@@ -64,13 +64,18 @@ export const HeroSearch: React.FC<HeroSearchProps> = ({
         </div>
 
         {/* Hero Title */}
-        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#003B73] tracking-tight leading-[1.2] mb-3 sm:mb-4">
+        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#003B73] tracking-tight leading-[1.2] mb-2 sm:mb-3">
           Trạm Radar bắt trọn mọi cơ hội cuộc thi, <br className="hidden sm:inline" />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0B4F9F] via-[#1E88E5] to-blue-600">
             hội thảo & hoạt động ngoại khóa
           </span>{' '}
           tại ULIS
         </h1>
+
+        {/* Official Slogan (Tiêu chí 2) */}
+        <p className="text-xs sm:text-base font-bold italic text-[#0B4F9F] tracking-wide mb-4 sm:mb-5">
+          &ldquo;Bắt trọn cơ hội — Nâng tầm tri thức — Kiến tạo tương lai sinh viên Ngoại ngữ&rdquo;
+        </p>
 
         {/* Survey insight description */}
         <p className="max-w-3xl mx-auto text-sm sm:text-lg text-slate-600 leading-relaxed mb-5 sm:mb-8">
