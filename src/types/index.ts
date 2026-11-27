@@ -52,6 +52,7 @@ export interface EventItem {
   bannerGradient: string; // CSS gradient class
   bannerTheme: string;
   bannerTag: string;
+  imageUrl?: string;
   shortDesc: string;
   fullDesc: string;
   detailedBenefits: string[];

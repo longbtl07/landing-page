@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { 
   X, 
   Calendar, 
@@ -75,7 +76,22 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({
         
         {/* Modal Banner Header */}
         <div className={`relative p-6 sm:p-8 bg-gradient-to-br ${event.bannerGradient} text-white shrink-0 overflow-hidden`}>
-          
+          {event.imageUrl && (
+            <>
+              <Image
+                src={event.imageUrl}
+                alt={event.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover object-center opacity-35"
+              />
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-[#00142B]/95 via-[#001833]/75 to-[#002244]/70"
+              />
+            </>
+          )}
+
           {/* Subtle grid pattern */}
           <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" aria-hidden="true"></div>
 

@@ -24,6 +24,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-blue-800 via-indigo-900 to-slate-900',
     bannerTheme: 'Psychology & Positive Education',
     bannerTag: 'HỘI THẢO QUỐC TẾ',
+    imageUrl: '/images/events/icep-ulis-2026.jpg',
     shortDesc: 'Diễn đàn học thuật quốc tế về Tâm lý học và Giáo dục học với 3 báo cáo đề dẫn từ TS. Jati Ariati, PGS.TS. Đinh Thị Hồng Vân và TS. Nguyễn Minh Thành.',
     fullDesc: 'Hội thảo Quốc tế về Tâm lý học và Giáo dục học năm 2026 (ICEP-ULIS 2026) chính thức diễn ra vào Thứ Bảy, ngày 28/11/2026 tại Hội trường Sunwah, Trường Đại học Ngoại ngữ – ĐHQGHN.\n\nChương trình gồm Phiên toàn thể buổi sáng bàn về Ứng dụng AI trong dạy học, Mô hình cộng đồng hạnh phúc, Sức khỏe tâm thần từ góc độ gia đình, cùng các Tiểu ban song song về Giáo dục cảm xúc – xã hội (SEL) và Đổi mới phương pháp dạy học.',
     detailedBenefits: [
@@ -82,6 +83,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-emerald-800 via-teal-900 to-cyan-950',
     bannerTheme: 'Student Scientific Research',
     bannerTag: 'DIỄN ĐÀN KHOA HỌC',
+    imageUrl: '/images/events/ulis-students-forum-2027.jpg',
     shortDesc: 'Tiếp nhận đề xuất báo cáo tóm tắt & toàn văn về Sinh viên với AI, tiếng Anh như ngôn ngữ thứ hai (ESL), Văn hóa - Truyền thông và Khởi nghiệp sáng tạo.',
     fullDesc: 'Trường Đại học Ngoại ngữ, ĐHQGHN thông báo tổ chức Diễn đàn Khoa học sinh viên “ULIS Students Forum” 2027 với chủ đề: “Khoa học ngôn ngữ và giáo dục trong kỷ nguyên AI: Các tiếp cận liên ngành hướng tới phát triển bền vững”.\n\nCác chủ đề chính gồm: Sinh viên với công nghệ và trí tuệ nhân tạo; Đổi mới giáo dục & định hướng đưa tiếng Anh thành ngôn ngữ thứ hai (ESL); Ngoại ngữ chuyên ngành và nghiên cứu liên ngành; Văn hóa – truyền thông – quốc tế học; Khởi nghiệp đổi mới sáng tạo & sở hữu trí tuệ.',
     detailedBenefits: [
@@ -140,6 +142,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-amber-700 via-orange-800 to-rose-900',
     bannerTheme: 'Arabic Language & Culture Day',
     bannerTag: 'NGÀY QUỐC TẾ TIẾNG Ả RẬP',
+    imageUrl: '/images/events/ulis-arabic-30-years-2026.jpg',
     shortDesc: 'Chuỗi hoạt động kỷ niệm 30 năm đào tạo tiếng Ả Rập tại ULIS (1996-2026) gồm Triển lãm không gian văn hóa Ả Rập, Lễ mít-tinh và Chung kết "Ngân vang Thi ca Ả Rập".',
     fullDesc: 'Nhân kỷ niệm 30 năm giảng dạy Ngôn ngữ Ả Rập tại Trường Đại học Ngoại ngữ - ĐHQGHN và Ngày Quốc tế tiếng Ả Rập 18/12, Nhà trường tổ chức Lễ kỷ niệm cùng chuỗi hoạt động văn hóa - nghệ thuật đặc sắc vào 08:00 Thứ Năm, ngày 17/12/2026.\n\nĐiểm nhấn gồm: Triển lãm không gian văn hóa Ả Rập tại Khu Công trình Khoa Pháp, Lễ mít-tinh kỷ niệm và Vòng Chung kết Cuộc thi “Ngân vang Thi ca Ả Rập” tại Hội trường Vũ Đình Liên.',
     detailedBenefits: [
@@ -198,6 +201,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-purple-800 via-indigo-900 to-slate-900',
     bannerTheme: 'International Research Internship',
     bannerTag: 'THỰC TẬP QUỐC TẾ',
+    imageUrl: '/images/events/ulis-iirf-iit-delhi-2026.png',
     shortDesc: 'Thực tập, nghiên cứu 3–4 tháng dưới sự hướng dẫn của giảng viên IIT Delhi (Top 118 QS World University Rankings 2027) với học bổng tài trợ toàn phần.',
     fullDesc: 'Chương trình thực tập và nghiên cứu quốc tế IIRF – Winter 2026 tại Học viện Công nghệ Ấn Độ (IIT Delhi) mở ra cơ hội cho sinh viên năm 3, năm 4, học viên cao học ĐHQGHN sang thực tập nghiên cứu trong 3–4 tháng.\n\nỨng viên được miễn 100% học phí tại IIT Delhi, miễn phí chỗ ở trong khuôn viên trường, hỗ trợ vé máy bay khứ hồi hạng phổ thông và nhận trợ cấp sinh hoạt 15.000 INR/tháng.',
     detailedBenefits: [
@@ -255,6 +259,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-sky-700 via-blue-800 to-indigo-950',
     bannerTheme: 'ULIS Sports & Spirit',
     bannerTag: 'THỂ THAO SINH VIÊN',
+    imageUrl: '/images/events/ulis-cup-2026.jpg',
     shortDesc: 'Sân chơi bóng đá thường niên lớn nhất của học sinh, sinh viên ULIS với các trận tranh tài kịch tính giữa đội tuyển các Khoa và tinh thần cổ vũ cuồng nhiệt.',
     fullDesc: 'Ngày 22/11/2026, Trường Đại học Ngoại ngữ, ĐHQGHN đã chính thức khai mạc Giải bóng đá học sinh sinh viên ULIS CUP 2026. Giải đấu là sân chơi thể thao truyền thống thúc đẩy phong trào rèn luyện thể chất, tăng cường giao lưu và gắn kết sinh viên các Khoa.\n\nCác trận đấu vòng bảng và vòng knock-out diễn ra sôi nổi vào các buổi cuối tuần từ cuối tháng 11 sang tháng 12/2026.',
     detailedBenefits: [
@@ -311,6 +316,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-blue-700 via-indigo-900 to-purple-950',
     bannerTheme: 'AI Pedagogy & EdTech',
     bannerTag: 'WORKSHOP AI SƯ PHẠM',
+    imageUrl: '/images/events/ulis-ai-teaching-workshop-2026.jpg',
     shortDesc: 'Trải nghiệm Bộ công cụ tự đánh giá năng lực sư phạm AI theo khung UNESCO (2024) qua 3 cấp độ: Acquire – Deepen – Create để xây dựng lộ trình dạy học.',
     fullDesc: 'Workshop là hoạt động chuyển giao kết quả nghiên cứu của đề tài khoa học N.24.18 do Trường Đại học Ngoại ngữ – ĐHQGHN tài trợ.\n\nTrong 120 phút, người tham dự được thực hiện trực tiếp Bộ công cụ tự đánh giá năng lực sư phạm AI (đã kiểm định với hơn 200 giáo viên) kết hợp Khung năng lực AI của UNESCO (2024) và Khung năng lực giáo viên ngoại ngữ Việt Nam, nhận phản hồi cá nhân theo 3 cấp độ: Acquire (Tiếp thu), Deepen (Đào sâu), Create (Sáng tạo).',
     detailedBenefits: [
@@ -367,6 +373,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-slate-800 via-blue-900 to-indigo-950',
     bannerTheme: 'Graduation Ceremony',
     bannerTag: 'SỰ KIỆN TRỌNG ĐIỂM',
+    imageUrl: '/images/events/ulis-graduation-ceremony-2026.jpg',
     shortDesc: 'Buổi lễ vinh danh và trao bằng tốt nghiệp trang trọng cho các tân cử nhân Trường Đại học Ngoại ngữ tại Hội trường Nguyễn Văn Đạo, ĐHQGHN.',
     fullDesc: 'Phòng Đào tạo và Người học Trường Đại học Ngoại ngữ thông báo lịch tổ chức Lễ trao bằng tốt nghiệp cho sinh viên đại học chính quy tốt nghiệp đợt tháng 9/2026 vào sáng Thứ Sáu, ngày 04/12/2026.\n\nThời gian tập trung sinh viên từ 07:00; Lễ trao bằng chính thức diễn ra từ 08:30 đến 10:00 tại Hội trường Nguyễn Văn Đạo, 144 Xuân Thủy, Cầu Giấy, Hà Nội.',
     detailedBenefits: [
@@ -422,6 +429,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-emerald-700 via-green-800 to-teal-950',
     bannerTheme: 'Finance & Green Economy',
     bannerTag: 'CHUNG KẾT ĐÃ DIỄN RA',
+    imageUrl: '/images/events/ulis-fingenius-2026.png',
     shortDesc: '6 đội thi xuất sắc (Landmark, SugerTank, APEX, ECONIC, CHEDDAR, FIGHTEND) tranh tài giải pháp tài chính xanh và lộ trình chuyển đổi xe điện tại Hà Nội.',
     fullDesc: 'Ngày 25/11/2026 tại Hội trường Sunwah, Khoa Giáo dục Quốc tế – ULIS đã tổ chức thành công Vòng Chung kết cuộc thi FinGenius 2026 với chủ đề “Giảm phát thải & Sống xanh (Green)”.\n\nSáu đội thi xuất sắc nhất đã kết hợp kiến thức kinh tế – tài chính, ngoại ngữ và sân khấu hóa để phân tích lộ trình chuyển đổi phương tiện xanh tại Vành đai 1 Hà Nội trước Hội đồng Giám khảo quốc tế (gồm GS. Arval Cogdill từ ĐH Southern New Hampshire).',
     detailedBenefits: [
@@ -478,6 +486,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-rose-700 via-red-800 to-amber-900',
     bannerTheme: 'Career Fair & Recruitment',
     bannerTag: 'NGÀY HỘI VIỆC LÀM',
+    imageUrl: '/images/events/ulis-career-fair-chinese-2026.png',
     shortDesc: 'Cầu nối trực tiếp giúp sinh viên ULIS tiếp cận thị trường lao động với 15 doanh nghiệp lớn (Goodfaith, RR Donnelley, Bright VN, Zonsen VN...) ở mảng công nghệ, tài chính, giáo dục.',
     fullDesc: 'Tiếp nối thành công từ tháng 1/2026, chiều ngày 25/11/2026 Khoa Ngôn ngữ và Văn hóa Trung Quốc đã tổ chức thành công “Ngày hội kết nối doanh nghiệp - sinh viên 2026” tại Hội trường Vũ Đình Liên và Khuôn viên Khoa Pháp.\n\nSự kiện quy tụ 15 đơn vị tuyển dụng uy tín trong và ngoài nước (Goodfaith Việt Nam, RR Donnelley, Bright Việt Nam, Zonsen Việt Nam...), giúp sinh viên phỏng vấn thử, nộp CV trực tiếp và nhận tư vấn định hướng nghề nghiệp thực tế.',
     detailedBenefits: [
@@ -534,6 +543,7 @@ export const INITIAL_EVENTS: EventItem[] = [
     bannerGradient: 'from-blue-900 via-cyan-900 to-slate-950',
     bannerTheme: 'AI & Smart University',
     bannerTag: 'ĐỔI MỚI SÁNG TẠO',
+    imageUrl: '/images/events/ulis-hackathon-2026.jpg',
     shortDesc: 'Cuộc thi 24 giờ phát triển và thử nghiệm 24 giải pháp ứng dụng công nghệ & trí tuệ nhân tạo hướng tới xây dựng đại học thông minh tại ULIS.',
     fullDesc: 'Nằm trong khuôn khổ Ngày hội Chất lượng năm 2026, Trường Đại học Ngoại ngữ – ĐHQGHN lần đầu tiên tổ chức cuộc thi ULIS HACKATHON 2026 với chủ đề “ULIS+ FOR A SMARTER UNIVERSITY”.\n\nTrong 24 giờ liên tục (05–06/11/2026), 24 đội thi đã nghiên cứu dữ liệu, thiết kế giao diện và phát triển các sản phẩm AI thực tế phục vụ quản lý, giảng dạy và học tập, trước khi được Hiệu trưởng TS. Đỗ Tuấn Minh trao giải vào ngày 13/11/2026.',
     detailedBenefits: [

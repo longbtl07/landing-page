@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   Calendar,
   MapPin,
@@ -98,6 +99,33 @@ export const EventCard: React.FC<EventCardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Real Event Photo / Official Poster */}
+      {event.imageUrl ? (
+        <button
+          type="button"
+          onClick={() => onSelectEvent(event)}
+          aria-label={`Xem chi tiết ${event.title}`}
+          className="relative aspect-[16/9] w-full overflow-hidden bg-slate-900 cursor-pointer block focus:outline-none"
+        >
+          <Image
+            src={event.imageUrl}
+            alt={event.title}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-gradient-to-t from-[#001833]/75 via-transparent to-transparent"
+          />
+          <span className="absolute bottom-2.5 left-3 px-2.5 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-[#001833]/85 text-cyan-200 border border-cyan-400/30 backdrop-blur-xs">
+            {event.bannerTag}
+          </span>
+        </button>
+      ) : (
+        <div className={`h-2 w-full bg-gradient-to-r ${event.bannerGradient}`} aria-hidden="true" />
+      )}
 
       <div className="flex flex-col flex-1 p-4 sm:p-5">
         {/* Live Deadline Countdown Badge */}

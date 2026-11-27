@@ -22,36 +22,36 @@ interface GalleryItem {
 
 const GALLERY_ITEMS: GalleryItem[] = [
   {
-    id: 'g-debate',
-    src: '/images/debate-ulis.jpg',
-    alt: 'Sinh viên ULIS tham gia cuộc thi tranh biện tiếng Anh trên sân khấu hội trường',
-    title: 'Đấu trường Tranh biện & Hùng biện',
-    category: 'Cuộc thi học thuật',
-    caption: 'Các cuộc thi tranh biện song ngữ quy mô toàn trường và liên đại học.',
+    id: 'g-hackathon',
+    src: '/images/events/ulis-hackathon-2026.jpg',
+    alt: 'Lễ trao giải cuộc thi ULIS Hackathon 2026 tại Trường ĐH Ngoại ngữ',
+    title: 'ULIS Hackathon 2026',
+    category: 'Đổi mới sáng tạo • 24 đội thi',
+    caption: '24 giờ sáng tạo công nghệ & AI hướng tới đại học thông minh tại ULIS.',
   },
   {
-    id: 'g-workshop',
-    src: '/images/workshop-ulis.jpg',
-    alt: 'Sinh viên tham dự workshop kỹ năng viết CV và chiến lược IELTS tại giảng đường',
-    title: 'Workshop Kỹ năng & Chứng nhận CV',
-    category: 'Phát triển bản thân',
-    caption: 'Cập nhật lịch hội thảo nghề nghiệp, luyện IELTS và cấp Certificate.',
+    id: 'g-fingenius',
+    src: '/images/events/ulis-fingenius-2026.png',
+    alt: 'Vòng Chung kết cuộc thi FinGenius 2026 tại Hội trường Sunwah ULIS',
+    title: 'Chung kết FinGenius 2026',
+    category: 'Khoa Giáo dục Quốc tế',
+    caption: '6 đội thi tranh tài giải pháp Kinh tế - Tài chính Xanh tại Hội trường Sunwah.',
   },
   {
-    id: 'g-culture',
-    src: '/images/culture-ulis.jpg',
-    alt: 'Lễ hội giao lưu văn hóa và ngôn ngữ quốc tế tại khuôn viên ĐH Ngoại ngữ',
-    title: 'Lễ hội Văn hóa Đa ngôn ngữ',
-    category: 'Giao lưu quốc tế',
-    caption: 'Không gian giao lưu văn hóa Anh, Trung, Nhật, Hàn, Pháp, Đức, Nga...',
+    id: 'g-career',
+    src: '/images/events/ulis-career-fair-chinese-2026.png',
+    alt: 'Ngày hội Kết nối Doanh nghiệp - Sinh viên 2026 tại ULIS',
+    title: 'Kết nối Doanh nghiệp - Sinh viên',
+    category: '15 Doanh nghiệp & Tập đoàn',
+    caption: 'Cơ hội nộp CV trực tiếp, phỏng vấn thực tập và định hướng nghề nghiệp.',
   },
   {
-    id: 'g-teammate',
-    src: '/images/teammate-ulis.jpg',
-    alt: 'Nhóm sinh viên ULIS thảo luận ghép đội chuẩn bị cho cuộc thi tại thư viện',
-    title: 'Ghép đội Học thuật Liên khoa',
-    category: 'Teammate Finder',
-    caption: 'Tìm đồng đội ăn ý về Design, Research và Presentation chỉ trong vài phút.',
+    id: 'g-uliscup',
+    src: '/images/events/ulis-cup-2026.jpg',
+    alt: 'Giải bóng đá học sinh sinh viên ULIS CUP 2026',
+    title: 'Giải bóng đá ULIS CUP 2026',
+    category: 'Thể thao & Giao lưu các Khoa',
+    caption: 'Không khí tranh tài sôi nổi trên sân bóng Trường ĐH Ngoại ngữ.',
   },
 ];
 
@@ -92,7 +92,7 @@ export const MediaShowcaseSection: React.FC = () => {
                   controls
                   playsInline
                   preload="metadata"
-                  poster="/images/debate-ulis.jpg"
+                  poster="/images/events/ulis-hackathon-2026.jpg"
                   aria-label="Video giới thiệu hệ thống ULIS Events & Competitions Radar"
                   className="w-full aspect-video object-cover"
                 >
